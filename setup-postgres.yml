@@ -50,8 +50,9 @@
 
     # GRANT/REVOKE privs ON type objs TO/FROM roles
     - name: "Grant db user access to app db"
-      postgresql_privs:
-        database: "{{ db_name }}"
+      community.postgresql.postgresql_privs:
+        login_db: "{{ db_name }}"
+        obj: "{{ db_name }}"
         privs: all
         type: database
         role: "{{ db_user }}"
@@ -60,8 +61,8 @@
       become_user: postgres
 
     - name: "Grant db user access to public schema"
-      postgresql_privs:
-        database: "{{ db_name }}"
+      community.postgresql.postgresql_privs:
+        login_db: "{{ db_name }}"
         privs: all
         type: schema
         obj: public
@@ -72,7 +73,7 @@
 
     - name: "Allow md5 connection for the db user"
       postgresql_pg_hba:
-        dest: "~/data/pg_hba.conf"
+        dest: "/var/lib/pgsql/data/pg_hba.conf"
         contype: host
         databases: all
         method: md5

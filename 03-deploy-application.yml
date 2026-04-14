@@ -1,7 +1,5 @@
 - name: Deploy application
   hosts: all
-  become: true
-  remote_user: "{{ user }}"
 
   vars:
     caddy_config_path: "/etc/caddy/Caddyfile"
@@ -37,7 +35,8 @@
       delegate_to: localhost
       changed_when: false
 
-    - set_fact:
+    - name: Set vsn_next fact
+      set_fact:
         vsn_next: "{{ vsn_next.stdout }}"
 
     - name: Get live app version number
@@ -50,7 +49,8 @@
       register: vsn_live
       changed_when: false
 
-    - set_fact:
+    - name: Set vsn_live fact
+      set_fact:
         vsn_live: "{{ vsn_live.stdout }}"
 
     - name: Fail if the versions match
@@ -135,7 +135,7 @@
     - name: Wait for port to close active connections
       wait_for:
         host: 0.0.0.0
-        port: "{{ port }}"
+        port: "{{ app_port }}"
         state: drained
 
     # Downtime starts here!
@@ -169,6 +169,6 @@
 
     - name: Check app is running
       wait_for:
-        port: "{{ port }}"
+        port: "{{ app_port }}"
         delay: 5
         timeout: 15

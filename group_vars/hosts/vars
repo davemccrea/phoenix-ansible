@@ -7,7 +7,9 @@ project_pretty_name: Eden Flowers
 project_url: edenflowers.mccrea.link
 tailscale_hostname: edenflowers-server
 tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
-db_name: prod
+db_name: "{{ project_name }}_prod"
+
+ansible_python_interpreter: /usr/bin/python3
 
 # Leave me alone!
 maintenance_dir: /opt/{{ project_name }}/maintenance

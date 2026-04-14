@@ -1,12 +1,12 @@
 # Change me!
 user: david
-port: 4000
-project_name: fancy_app # Should match Phoenix project name
-project_pretty_name: Fancy App
-project_url: fancy-app.mccrea.link
-tailscale_hostname: fancy-server
+app_port: 4000
+project_name: edenflowers_final # Should match Phoenix project name
+repo_dir: "~/code/2_Projects/{{ project_name }}"
+project_pretty_name: Eden Flowers
+project_url: edenflowers.mccrea.link
+tailscale_hostname: edenflowers-server
 tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
-repo_dir: "/var/home/david/code/5_Playground/{{ project_name }}"
 db_name: prod
 
 # Leave me alone!

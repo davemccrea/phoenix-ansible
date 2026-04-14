@@ -23,7 +23,7 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^#?\s*PasswordAuthentication\s'
-        line: 'PasswordAuthentication no'
+        line: "PasswordAuthentication no"
         state: present
         backup: yes
       notify: Reload SSH
@@ -32,7 +32,7 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^#?\s*PermitRootLogin\s'
-        line: 'PermitRootLogin no'
+        line: "PermitRootLogin no"
         state: present
       notify: Reload SSH
 
@@ -66,11 +66,11 @@
     - name: Allow HTTP
       ufw:
         rule: allow
-        port: '80'
+        port: "80"
         proto: tcp
 
     - name: Allow HTTPS
       ufw:
         rule: allow
-        port: '443'
+        port: "443"
         proto: tcp

@@ -8,3 +8,13 @@
       apt:
         upgrade: dist
         update_cache: yes
+
+    - name: Check if reboot is required
+      stat:
+        path: /var/run/reboot-required
+      register: reboot_required
+
+    - name: Reboot if required
+      reboot:
+        reboot_timeout: 300
+      when: reboot_required.stat.exists

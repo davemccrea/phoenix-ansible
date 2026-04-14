@@ -3,7 +3,7 @@
   become: true
   remote_user: "{{ user }}"
 
-  pre_tasks:
+  tasks:
     - name: Install packages
       apt:
         name:
@@ -14,44 +14,49 @@
         state: present
         update_cache: yes
 
-  tasks:
     - name: Start and enable postgresql
       service:
         name: postgresql
         state: started
         enabled: true
 
-    - name: "Create app database"
-      postgresql_db:
+    - name: Set password encryption to scram-sha-256
+      community.postgresql.postgresql_alter_system:
+        param: password_encryption
+        value: scram-sha-256
+      become: true
+      become_user: postgres
+      notify: Restart postgresql
+
+    - name: Create app database
+      community.postgresql.postgresql_db:
         state: present
         name: "{{ db_name }}"
       become: true
       become_user: postgres
 
-    - name: "Create db user"
-      postgresql_user:
+    - name: Create db user
+      community.postgresql.postgresql_user:
         state: present
         name: "{{ db_user }}"
         password: "{{ db_password }}"
       become: true
       become_user: postgres
 
-    # GRANT/REVOKE privs ON type objs TO/FROM roles
-    - name: "Grant db user access to app db"
+    - name: Grant db user access to app db
       community.postgresql.postgresql_privs:
         login_db: "{{ db_name }}"
-        obj: "{{ db_name }}"
-        privs: all
+        privs: ALL
         type: database
         role: "{{ db_user }}"
         grant_option: false
       become: true
       become_user: postgres
 
-    - name: "Grant db user access to public schema"
+    - name: Grant db user access to public schema
       community.postgresql.postgresql_privs:
         login_db: "{{ db_name }}"
-        privs: all
+        privs: ALL
         type: schema
         obj: public
         role: "{{ db_user }}"
@@ -59,19 +64,19 @@
       become: true
       become_user: postgres
 
-    - name: Get PostgreSQL config directory
+    - name: Get PostgreSQL hba config path
       command: psql -t -c "SHOW hba_file"
       become: true
       become_user: postgres
       register: pg_hba_path
       changed_when: false
 
-    - name: "Allow md5 connection for the db user"
-      postgresql_pg_hba:
+    - name: Allow scram-sha-256 connection for the db user
+      community.postgresql.postgresql_pg_hba:
         dest: "{{ pg_hba_path.stdout | trim }}"
         contype: host
         databases: all
-        method: md5
+        method: scram-sha-256
         users: "{{ db_user }}"
         create: true
       become: true

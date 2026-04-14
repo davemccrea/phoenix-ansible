@@ -1,7 +1,7 @@
 # Simple Phoenix deployment with Ansible
 
 > [!NOTE]
-> Intended for use on Fedora. Tested on version 40.
+> Intended for use on Ubuntu.
 
 By "simple" I mean the following:
 
@@ -47,6 +47,12 @@ Install requirements needed for running the playbooks:
 ansible-galaxy install -r requirements.yml
 ```
 
+To upgrade all collections to their latest versions:
+
+```bash
+ansible-galaxy collection install -r requirements.yml --upgrade
+```
+
 ### Add host
 
 Specify the target host by updating the `hosts` file:
@@ -62,8 +68,8 @@ Modify the `group_vars/hosts/vars` file to reflect your environment's specific d
 
 ```yaml
 user: david
-port: 4000
-project_name: my_app
+app_port: 4000
+project_name: my_app # Should match Phoenix project name
 # etc...
 ```
 

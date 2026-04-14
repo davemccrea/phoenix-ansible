@@ -28,6 +28,14 @@
         backup: yes
       notify: Reload SSH
 
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?\s*PermitRootLogin\s'
+        line: 'PermitRootLogin no'
+        state: present
+      notify: Reload SSH
+
     - name: Install Fail2Ban
       apt:
         name: fail2ban
@@ -44,16 +52,16 @@
         name: ufw
         state: present
 
+    - name: Allow SSH
+      ufw:
+        rule: allow
+        name: OpenSSH
+
     - name: Enable ufw
       ufw:
         state: enabled
         policy: deny
         direction: incoming
-
-    - name: Allow SSH
-      ufw:
-        rule: allow
-        name: OpenSSH
 
     - name: Allow HTTP
       ufw:

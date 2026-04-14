@@ -2,15 +2,57 @@
   hosts: all
   become: true
 
-  roles:
-    - role: artis3n.tailscale
-      vars:
-        tailscale_authkey: "{{ vault_tailscale_authkey }}"
-        tailscale_args: "--hostname={{ tailscale_hostname }}"
-
   tasks:
+    - name: Add Tailscale GPG key
+      ansible.builtin.get_url:
+        url: https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg
+        dest: /usr/share/keyrings/tailscale-archive-keyring.gpg
+        mode: "0644"
+
+    - name: Add Tailscale apt repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu noble main"
+        filename: tailscale
+        state: present
+
+    - name: Install Tailscale
+      ansible.builtin.apt:
+        name: tailscale
+        state: present
+        update_cache: true
+
+    - name: Enable and start tailscaled
+      ansible.builtin.systemd:
+        name: tailscaled
+        enabled: true
+        state: started
+
+    - name: Check Tailscale status
+      ansible.builtin.command:
+        cmd: tailscale status --json
+      register: tailscale_status
+      changed_when: false
+      failed_when: false
+
+    - name: Parse Tailscale status
+      ansible.builtin.set_fact:
+        tailscale_current_hostname: "{{ (tailscale_status.stdout | from_json).Self.HostName | default('') }}"
+        tailscale_online: "{{ (tailscale_status.stdout | from_json).Self.Online | default(false) }}"
+      when: tailscale_status.rc == 0 and tailscale_status.stdout != ''
+
+    - name: Bring Tailscale up
+      ansible.builtin.command:
+        cmd: tailscale up --authkey={{ vault_tailscale_authkey }} --hostname={{ tailscale_hostname }} --accept-dns=false
+      register: tailscale_up
+      changed_when: true
+      no_log: true
+      when: >
+        tailscale_status.rc != 0
+        or not tailscale_online | default(false)
+        or tailscale_current_hostname | default('') != tailscale_hostname
+
     - name: Allow traffic on tailscale0 interface
-      ufw:
+      community.general.ufw:
         rule: allow
         interface: tailscale0
         direction: in

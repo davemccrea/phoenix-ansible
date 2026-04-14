@@ -4,16 +4,31 @@
   remote_user: "{{ user }}"
 
   tasks:
-    - name: Add repo
-      community.general.copr:
-        name: '@caddy/caddy'
-        state: enabled
+    - name: Install dependencies for apt repo
+      apt:
+        name:
+          - debian-keyring
+          - debian-archive-keyring
+          - apt-transport-https
+          - curl
+        state: present
+        update_cache: yes
+
+    - name: Add Caddy GPG key
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+
+    - name: Add Caddy apt repository
+      shell: curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+      args:
+        creates: /etc/apt/sources.list.d/caddy-stable.list
 
     - name: Install Caddy
-      dnf:
-        update_cache: true
+      apt:
         name: caddy
         state: latest
+        update_cache: yes
 
     - name: Start and enable Caddy
       service:

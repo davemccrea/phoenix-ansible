@@ -9,10 +9,8 @@
         tailscale_args: "--hostname={{ tailscale_hostname }}"
 
   tasks:
-    - name: Add tailscale0 interface to trusted zone
-      firewalld:
-        zone: trusted
+    - name: Allow traffic on tailscale0 interface
+      ufw:
+        rule: allow
         interface: tailscale0
-        permanent: true
-        immediate: true
-        state: enabled
+        direction: in

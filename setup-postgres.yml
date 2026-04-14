@@ -5,33 +5,21 @@
 
   pre_tasks:
     - name: Install packages
-      dnf:
-        name: "{{ item }}"
+      apt:
+        name:
+          - postgresql
+          - postgresql-contrib
+          - python3-psycopg2
+          - acl
         state: present
-        update_cache: true
-      with_items:
-        - postgresql-server
-        - postgresql-contrib
-        - python3-psycopg2
-        - acl
+        update_cache: yes
 
   tasks:
-    - name: "Find out if PostgreSQL is initialized"
-      ansible.builtin.stat:
-        path: "/var/lib/pgsql/data/pg_hba.conf"
-      register: postgres_data
-
-    - name: "Initialize PostgreSQL"
-      shell: "postgresql-setup initdb"
-      when: not postgres_data.stat.exists
- 
-    - name: "Start and enable services"
-      service: 
-        name: "{{ item }}"
+    - name: Start and enable postgresql
+      service:
+        name: postgresql
         state: started
         enabled: true
-      with_items:
-        - postgresql
 
     - name: "Create app database"
       postgresql_db:
@@ -71,9 +59,16 @@
       become: true
       become_user: postgres
 
+    - name: Get PostgreSQL config directory
+      command: psql -t -c "SHOW hba_file"
+      become: true
+      become_user: postgres
+      register: pg_hba_path
+      changed_when: false
+
     - name: "Allow md5 connection for the db user"
       postgresql_pg_hba:
-        dest: "/var/lib/pgsql/data/pg_hba.conf"
+        dest: "{{ pg_hba_path.stdout | trim }}"
         contype: host
         databases: all
         method: md5
@@ -82,7 +77,7 @@
       become: true
       become_user: postgres
       notify: Restart postgresql
- 
+
   handlers:
     - name: Restart postgresql
       systemd:

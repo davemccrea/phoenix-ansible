@@ -6,22 +6,22 @@
   remote_user: root
 
   tasks:
-    - name: Check for 'wheel' group
+    - name: Check for 'sudo' group
       group:
-        name=wheel
-        state=present
+        name: sudo
+        state: present
 
-    - name: Allow wheel group to have passwordless sudo
+    - name: Allow sudo group to have passwordless sudo
       lineinfile:
         dest: /etc/sudoers
         state: present
-        regexp: '^%wheel'
-        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        regexp: '^%sudo'
+        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
 
     - name: Create a user
       user:
         name: "{{ user }}"
-        groups: wheel
+        groups: sudo
         append: yes
         state: present
 

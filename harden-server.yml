@@ -1,101 +1,23 @@
-# https://www.redhat.com/sysadmin/ansible-linux-server-security
-
 - name: Harden server
   hosts: all
   become: true
   remote_user: "{{ user }}"
-
   handlers:
-    - name: Reload firewalld
+    - name: Reload ufw
       service:
-        name: firewalld
+        name: ufw
         state: reloaded
 
     - name: Reload SSH
       service:
-        name: sshd
+        name: ssh
         state: reloaded
 
   tasks:
-    # - name: Harden kernel parameters
-    #   ansible.posix.sysctl:
-    #     name: "{{ item.name }}"
-    #     value: '{{ item.value }}'
-    #     sysctl_set: yes
-    #     state: present
-    #     reload: yes
-    #     sysctl_file: /etc/sysctl.d/90-kernel.conf
-    #   loop:
-    #   - name: kernel.randomize_va_space
-    #     value: 2
-    #   - name: kernel.dmesg_restrict
-    #     value: 1
-    #   - name: kernel.perf_event_paranoid
-    #     value: 2
-    #
-    # - name: Harden network parameters
-    #   ansible.posix.sysctl:
-    #     name: "{{ item.name }}"
-    #     value: '{{ item.value }}'
-    #     sysctl_set: yes
-    #     state: present
-    #     reload: yes
-    #     sysctl_file: /etc/sysctl.d/90-net.conf
-    #   loop:
-    #    - name: net.ipv4.tcp_syncookies
-    #      value: 1
-    #    - name: net.ipv4.conf.default.log_martians
-    #      value: 1
-    #    - name: net.ipv4.conf.all.log_martians
-    #      value: 1
-    #    - name: net.ipv4.conf.all.accept_source_route
-    #      value: 0
-    #    - name: net.ipv4.conf.default.accept_source_route
-    #      value: 0
-    #    - name: net.ipv6.conf.all.accept_source_route
-    #      value: 0
-    #    - name: net.ipv6.conf.default.accept_source_route
-    #      value: 0
-    #
-    # - name: Disable ip forwarding
-    #   ansible.posix.sysctl:
-    #     name: "{{ item.name }}"
-    #     value: '{{ item.value }}'
-    #     sysctl_set: yes
-    #     state: present
-    #     reload: yes
-    #     sysctl_file: /etc/sysctl.d/90-ip.conf
-    #   loop:
-    #   - name: net.ipv4.ip_forward
-    #     value: 0
-    #   - name: net.ipv6.conf.all.forwarding
-    #     value: 0
-    #
-    # - name: Disable ICMP echo and redirects
-    #   ansible.posix.sysctl:
-    #     name: "{{ item.name }}"
-    #     value: '{{ item.value }}'
-    #     sysctl_set: yes
-    #     state: present
-    #     reload: yes
-    #     sysctl_file: /etc/sysctl.d/90-icmp.conf
-    #   loop:
-    #   - name: net.ipv4.icmp_echo_ignore_broadcasts
-    #     value: 1
-    #   - name: net.ipv4.icmp_echo_ignore_all
-    #     value: 1
-    #   - name: net.ipv4.conf.default.accept_redirects
-    #     value: 0
-    #   - name: net.ipv4.conf.all.accept_redirects
-    #     value: 0
-    #   - name: net.ipv6.conf.all.accept_redirects
-    #     value: 0
-    #   - name: net.ipv6.conf.default.accept_redirects
-    #     value: 0
-    #   - name: net.ipv4.conf.default.send_redirects
-    #     value: 0
-    #   - name: net.ipv4.conf.all.send_redirects
-    #     value: 0
+    - name: Update package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
 
     - name: Disable PasswordAuthentication
       lineinfile:
@@ -107,7 +29,7 @@
       notify: Reload SSH
 
     - name: Install Fail2Ban
-      dnf:
+      apt:
         name: fail2ban
         state: present
 
@@ -117,23 +39,30 @@
         state: started
         enabled: true
 
-    - name: Install firewalld
-      dnf:
-        name: firewalld
+    - name: Install ufw
+      apt:
+        name: ufw
         state: present
 
-    - name: Start and enable firewalld
-      service:
-        name: firewalld
-        state: started
-        enabled: true
-
-    - name: Allow HTTP and HTTPS
-      firewalld:
-        service: "{{ item }}"
-        permanent: yes
+    - name: Enable ufw
+      ufw:
         state: enabled
-      with_items:
-        - http
-        - https
-      notify: Reload firewalld
+        policy: deny
+        direction: incoming
+
+    - name: Allow SSH
+      ufw:
+        rule: allow
+        name: OpenSSH
+
+    - name: Allow HTTP
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+    - name: Allow HTTPS
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp

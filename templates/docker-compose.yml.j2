@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/{{ github_username }}/{{ project_name }}:{{ app_version }}
+    image: ghcr.io/{{ github_username }}/{{ project_name }}:{{ app_version | default('latest') }}
     container_name: "{{ project_name }}"
     network_mode: host
     restart: unless-stopped

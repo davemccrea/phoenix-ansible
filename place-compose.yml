@@ -1,0 +1,22 @@
+- name: Place Docker Compose file
+  hosts: all
+  become: true
+  remote_user: "{{ user }}"
+
+  vars:
+    compose_dir: /opt/{{ project_name }}
+
+  tasks:
+    - name: Create app directory
+      file:
+        path: "{{ compose_dir }}"
+        state: directory
+        owner: "{{ user }}"
+        mode: "0755"
+
+    - name: Place docker-compose.yml
+      template:
+        src: templates/docker-compose.yml.j2
+        dest: "{{ compose_dir }}/docker-compose.yml"
+        owner: "{{ user }}"
+        mode: "0644"

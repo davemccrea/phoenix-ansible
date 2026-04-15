@@ -1,0 +1,19 @@
+services:
+  app:
+    image: ghcr.io/{{ github_username }}/{{ project_name }}:{{ app_version }}
+    container_name: "{{ project_name }}"
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "{{ database_url }}"
+      SECRET_KEY_BASE: "{{ vault_secret_key_base }}"
+      RELEASE_COOKIE: "{{ vault_release_cookie }}"
+      PHX_HOST: "{{ project_url }}"
+      PORT: "{{ app_port }}"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: "{{ vault_cloudflare_tunnel_token }}"

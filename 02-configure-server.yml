@@ -2,4 +2,5 @@
 - import_playbook: harden-server.yml
 - import_playbook: setup-tailscale.yml
 - import_playbook: setup-postgres.yml
-- import_playbook: setup-caddy.yml
+- import_playbook: setup-docker.yml
+- import_playbook: place-compose.yml

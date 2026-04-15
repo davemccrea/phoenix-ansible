@@ -6,42 +6,17 @@
 By "simple" I mean the following:
 
 - A single server
-- No containers
-- Mix releases built locally
-- Postgres on the same server
-- Some downtime during deployment is acceptable
+- Docker Compose for the app and Cloudflare Tunnel
+- Postgres on the same server, managed by Ansible
+- App deployment handled by GitHub Actions (not Ansible)
+
+The app and `cloudflared` run as Docker containers. Postgres runs directly on the host. Ansible handles server setup only — app deployments are done via GitHub Actions, which builds a Docker image, pushes it to ghcr.io, and pulls it onto the server.
 
 ## Getting started
 
 Make sure Ansible is installed and that you have SSH access to the target server.
 
-### Prepare your Phoenix project
-
-We want Mix to package the release as as tarball. Modidy `mix.exs`:
-
-```elixir
-  def project do
-    [
-      app: :my_app,
-      # ...
-      releases: [
-        my_app: [
-          steps: [:assemble, :tar]
-        ]
-      ],
-    ]
-  end
-```
-
-If you haven't already done so, generate Phoenix release files:
-
-```bash
-mix phx.gen.release
-```
-
 ### Install requirements
-
-Install requirements needed for running the playbooks:
 
 ```bash
 ansible-galaxy install -r requirements.yml
@@ -55,7 +30,7 @@ ansible-galaxy collection install -r requirements.yml --upgrade
 
 ### Add host
 
-Specify the target host by updating the `hosts` file:
+Specify the target host by updating the `inventory.ini` file:
 
 ```ini
 [hosts]
@@ -64,18 +39,20 @@ Specify the target host by updating the `hosts` file:
 
 ### Update vars file
 
-Modify the `group_vars/hosts/vars` file to reflect your environment's specific details:
+Modify `group_vars/hosts/vars` to reflect your environment:
 
 ```yaml
 user: david
 app_port: 4000
-project_name: my_app # Should match Phoenix project name
+project_name: my_app       # Should match your Phoenix project name
+project_url: myapp.example.com
+github_username: myusername
 # etc...
 ```
 
 ### Create a vault
 
-Ansible Vault is used to encrypt sensitive data, such as database credentials and secret keys. To create a new vault:
+Ansible Vault is used to encrypt sensitive data. To create a new vault:
 
 ```bash
 ansible-vault create group_vars/hosts/vault
@@ -103,13 +80,16 @@ vault_db_password: secret
 vault_secret_key_base: secret
 vault_release_cookie: secret
 vault_tailscale_authkey: secret
+vault_cloudflare_tunnel_token: secret
 ```
+
+The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `localhost:<app_port>`.
 
 ## Playbooks
 
 ### Create user
 
-Creates the user defined in `group_vars/hosts/vars` and disables SSH root access. It can/should be executed once.
+Creates the user defined in `group_vars/hosts/vars` and disables SSH root access. Run once.
 
 ```bash
 ansible-playbook 01-create-user.yml
@@ -117,37 +97,34 @@ ansible-playbook 01-create-user.yml
 
 ### Configure server
 
-Once the user is created, configure the server by running:
+Once the user is created, configure the server:
 
 ```bash
 ansible-playbook 02-configure-server.yml
 ```
 
-This playbook performs the following actions:
+This playbook:
 
-- Install updates and apply basic security configurations
-- Install and configures Postgres, and sets up the necessary database and privileges
-- Setup Caddy, my chosen reverse proxy
+- Installs updates and applies basic security hardening (UFW, fail2ban, SSH)
+- Installs and configures Postgres, creates the database and user
+- Installs Tailscale
+- Installs Docker
+- Places the `docker-compose.yml` at `/opt/<project_name>/docker-compose.yml`
 
-### Deploy application
+> [!NOTE]
+> UFW only opens port 22 (SSH) and the Tailscale interface. Ports 80/443 are not needed — all traffic arrives via the Cloudflare Tunnel.
 
-With the server configured, deploy the Phoenix application using:
+### App deployment
 
-```bash
-ansible-playbook 03-deploy-application.yml
-```
+App deployment is handled by GitHub Actions in the Phoenix app repo, not by Ansible. The workflow:
 
-This playbook builds a Mix release locally and transfers the resulting tarball to the server. It also applies any changes to the Caddyfile and service unit file. Note: Expect approximately 5-10 seconds of downtime during deployment. During this period, Caddy will serve a basic HTML maintenance page.
+1. Builds a Docker image from the app's `Dockerfile`
+2. Pushes the image to `ghcr.io/<github_username>/<project_name>`
+3. SSHes into the server, updates the image tag in `docker-compose.yml`, and runs `docker compose up -d`
+4. Runs database migrations via `docker compose exec app bin/migrate`
 
 ## Connect with Livebook
 
 Start Livebook on your local machine.
 
-Use "Attached Node" to connect to the Elixir node running on the server. The name of the server is the Tailscale hostname plus the tailnet name, e.g. `my_app@my-server.tail1234.ts.net`.
-
----
-
-**Todo**
-
-- [ ] Rollback app version using tarballs on server
-- [x] Install Tailscale to enable connecting livebook to the app in production
+Use "Attached Node" to connect to the Elixir node running on the server. The node name is the Tailscale hostname plus the tailnet name, e.g. `my_app@my-server.tail1234.ts.net`.

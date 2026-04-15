@@ -2,9 +2,8 @@
 user: david
 app_port: 4000
 project_name: edenflowers_final # Should match Phoenix project name
-repo_dir: "~/code/2_Projects/{{ project_name }}"
-project_pretty_name: Eden Flowers
 project_url: edenflowers.mccrea.link
+github_username: davidmccrea
 tailscale_hostname: edenflowers-server
 tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
 db_name: "{{ project_name }}_prod"
@@ -12,11 +11,6 @@ db_name: "{{ project_name }}_prod"
 ansible_python_interpreter: /usr/bin/python3
 
 # Leave me alone!
-maintenance_dir: /opt/{{ project_name }}/maintenance
-app_dir: /opt/{{ project_name }}/app
-app_dir_tmp: "{{ app_dir }}_tmp"
-tarballs_dir: /opt/{{ project_name }}/tarballs
 db_user: "{{ vault_db_user }}"
 db_password: "{{ vault_db_password }}"
-env_file: .env
-database_url: ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}
+database_url: "ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"

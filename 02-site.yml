@@ -1,0 +1,6 @@
+- import_playbook: playbooks/update-packages.yml
+- import_playbook: playbooks/harden-server.yml
+- import_playbook: playbooks/setup-tailscale.yml
+- import_playbook: playbooks/setup-postgres.yml
+- import_playbook: playbooks/setup-docker.yml
+- import_playbook: playbooks/place-compose.yml

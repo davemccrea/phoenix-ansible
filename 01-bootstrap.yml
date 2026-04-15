@@ -15,8 +15,8 @@
       lineinfile:
         dest: /etc/sudoers
         state: present
-        regexp: '^%sudo'
-        line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+        regexp: "^%sudo"
+        line: "%sudo ALL=(ALL) NOPASSWD: ALL"
 
     - name: Create a user
       user:
@@ -24,6 +24,7 @@
         groups: sudo
         append: yes
         state: present
+        shell: /bin/bash
 
     - name: Set authorized key
       authorized_key:

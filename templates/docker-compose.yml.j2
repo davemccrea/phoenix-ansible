@@ -14,6 +14,7 @@ services:
       STRIPE_API_KEY: "{{ vault_stripe_api_key }}"
       STRIPE_WEBHOOK_SECRET: "{{ vault_stripe_webhook_secret }}"
       HERE_API_KEY: "{{ vault_here_api_key }}"
+    network_mode: host
 
   cloudflared:
     image: cloudflare/cloudflared:latest

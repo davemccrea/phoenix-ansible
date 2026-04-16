@@ -55,3 +55,9 @@
         name: "{{ user }}"
         groups: docker
         append: yes
+
+    - name: Log in to GitHub Container Registry
+      community.docker.docker_login:
+        registry_url: ghcr.io
+        username: "{{ github_username }}"
+        password: "{{ github_token }}"

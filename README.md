@@ -83,7 +83,7 @@ vault_tailscale_authkey: secret
 vault_cloudflare_tunnel_token: secret
 ```
 
-The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `localhost:<app_port>`.
+The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `http://app:<app_port>` — use the container name `app`, not `localhost`, since the containers run on a shared Docker bridge network.
 
 ## Playbooks
 
@@ -92,7 +92,7 @@ The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard
 Creates the user defined in `group_vars/hosts/vars` and disables SSH root access. Run once.
 
 ```bash
-ansible-playbook 01-create-user.yml
+ansible-playbook 01-bootstrap.yml
 ```
 
 ### Configure server
@@ -100,7 +100,7 @@ ansible-playbook 01-create-user.yml
 Once the user is created, configure the server:
 
 ```bash
-ansible-playbook 02-configure-server.yml
+ansible-playbook 02-site.yml
 ```
 
 This playbook:

@@ -14,4 +14,4 @@ ansible_python_interpreter: /usr/bin/python3
 github_token: "{{ vault_github_token }}"
 db_user: "{{ vault_db_user }}"
 db_password: "{{ vault_db_password }}"
-database_url: "ecto://{{ db_user }}:{{ db_password }}@host.docker.internal:5432/{{ db_name }}"
+database_url: "ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"

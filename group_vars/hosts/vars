@@ -3,7 +3,7 @@ user: david
 app_port: 4000
 project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
 project_url: edenflowers.mccrea.link
-github_username: davidmccrea
+github_username: davemccrea
 tailscale_hostname: edenflowers-server
 tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
 db_name: "{{ project_name }}_prod"
@@ -11,6 +11,7 @@ db_name: "{{ project_name }}_prod"
 ansible_python_interpreter: /usr/bin/python3
 
 # Leave me alone!
+github_token: "{{ vault_github_token }}"
 db_user: "{{ vault_db_user }}"
 db_password: "{{ vault_db_password }}"
 database_url: "ecto://{{ db_user }}:{{ db_password }}@host.docker.internal:5432/{{ db_name }}"

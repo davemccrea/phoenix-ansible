@@ -44,7 +44,7 @@
       ansible.builtin.command:
         cmd: tailscale up --authkey={{ vault_tailscale_authkey }} --hostname={{ tailscale_hostname }} --accept-dns=false
       register: tailscale_up
-      changed_when: true
+      changed_when: tailscale_up.rc == 0 and tailscale_up.stderr != ''
       no_log: true
       when: >
         tailscale_status.rc != 0

@@ -1,7 +1,7 @@
 # Change me!
 user: david
 app_port: 4000
-project_name: edenflowers_final # Should match Phoenix project name
+project_name: edenflowers # Should match Phoenix project name
 project_url: edenflowers.mccrea.link
 github_username: davidmccrea
 tailscale_hostname: edenflowers-server
@@ -13,4 +13,4 @@ ansible_python_interpreter: /usr/bin/python3
 # Leave me alone!
 db_user: "{{ vault_db_user }}"
 db_password: "{{ vault_db_password }}"
-database_url: "ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"
+database_url: "ecto://{{ db_user }}:{{ db_password }}@host.docker.internal:5432/{{ db_name }}"

@@ -2,14 +2,18 @@ services:
   app:
     image: ghcr.io/{{ github_username }}/{{ project_name }}:{{ app_version | default('latest') }}
     container_name: "{{ project_name }}"
-    network_mode: host
     restart: unless-stopped
     environment:
-      DATABASE_URL: "{{ database_url }}"
-      SECRET_KEY_BASE: "{{ vault_secret_key_base }}"
-      RELEASE_COOKIE: "{{ vault_release_cookie }}"
+      PHX_SERVER: "true"
       PHX_HOST: "{{ project_url }}"
       PORT: "{{ app_port }}"
+      SECRET_KEY_BASE: "{{ vault_secret_key_base }}"
+      TOKEN_SIGNING_SECRET: "{{ vault_token_signing_secret }}"
+      DATABASE_URL: "{{ database_url }}"
+      RELEASE_COOKIE: "{{ vault_release_cookie }}"
+      STRIPE_API_KEY: "{{ vault_stripe_api_key }}"
+      STRIPE_WEBHOOK_SECRET: "{{ vault_stripe_webhook_secret }}"
+      HERE_API_KEY: "{{ vault_here_api_key }}"
 
   cloudflared:
     image: cloudflare/cloudflared:latest

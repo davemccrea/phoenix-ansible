@@ -1,7 +1,7 @@
 # Change me!
 user: david
 app_port: 4000
-project_name: edenflowers # Should match Phoenix project name
+project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
 project_url: edenflowers.mccrea.link
 github_username: davidmccrea
 tailscale_hostname: edenflowers-server

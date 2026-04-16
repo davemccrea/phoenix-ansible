@@ -10,6 +10,8 @@ db_name: "{{ project_name }}_prod"
 
 ansible_python_interpreter: /usr/bin/python3
 
+github_actions_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHR1/KrPvby/MpfjDv9sM6X9zRMyrAVXNqVpcYzGJDm github-actions"
+
 # Leave me alone!
 github_token: "{{ vault_github_token }}"
 db_user: "{{ vault_db_user }}"

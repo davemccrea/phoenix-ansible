@@ -127,6 +127,22 @@ App deployment is handled by GitHub Actions in the Phoenix app repo, not by Ansi
 3. SSHes into the server, updates the image tag in `docker-compose.yml`, and runs `docker compose up -d`
 4. Runs database migrations via `docker compose exec app bin/migrate`
 
+#### SSH key setup for GitHub Actions
+
+Generate a dedicated key pair:
+
+```bash
+ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions -N ""
+```
+
+Add the public key to `group_vars/hosts/vars`:
+
+```yaml
+github_actions_public_key: "ssh-ed25519 AAAA... github-actions"
+```
+
+It will be added to `authorized_keys` when you run `01-bootstrap.yml`. Add the private key (`cat ~/.ssh/github_actions`) as a GitHub Actions secret (e.g. `SSH_PRIVATE_KEY`) in your app repo.
+
 ## Connect with Livebook
 
 Start Livebook on your local machine.

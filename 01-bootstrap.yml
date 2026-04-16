@@ -32,6 +32,12 @@
         state: present
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
+    - name: Set GitHub Actions authorized key
+      ansible.posix.authorized_key:
+        user: "{{ user }}"
+        state: present
+        key: "{{ github_actions_public_key }}"
+
     - name: Disallow root SSH access
       ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config

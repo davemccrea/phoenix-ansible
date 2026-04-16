@@ -53,6 +53,13 @@
       become: true
       become_user: postgres
 
+    - name: Enable citext extension
+      community.postgresql.postgresql_ext:
+        name: citext
+        db: "{{ db_name }}"
+      become: true
+      become_user: postgres
+
     - name: Grant db user access to public schema
       community.postgresql.postgresql_privs:
         login_db: "{{ db_name }}"

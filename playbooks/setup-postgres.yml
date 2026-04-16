@@ -12,7 +12,7 @@
           - python3-psycopg2
           - acl
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Start and enable postgresql
       ansible.builtin.service:
@@ -24,7 +24,6 @@
       community.postgresql.postgresql_alter_system:
         param: password_encryption
         value: scram-sha-256
-      become: true
       become_user: postgres
       notify: Restart postgresql
 
@@ -32,7 +31,6 @@
       community.postgresql.postgresql_db:
         state: present
         name: "{{ db_name }}"
-      become: true
       become_user: postgres
 
     - name: Create db user
@@ -40,7 +38,6 @@
         state: present
         name: "{{ db_user }}"
         password: "{{ db_password }}"
-      become: true
       become_user: postgres
 
     - name: Grant db user access to app db
@@ -50,14 +47,12 @@
         type: database
         role: "{{ db_user }}"
         grant_option: false
-      become: true
       become_user: postgres
 
     - name: Enable citext extension
       community.postgresql.postgresql_ext:
         name: citext
         login_db: "{{ db_name }}"
-      become: true
       become_user: postgres
 
     - name: Grant db user access to public schema
@@ -68,12 +63,10 @@
         obj: public
         role: "{{ db_user }}"
         grant_option: false
-      become: true
       become_user: postgres
 
     - name: Get PostgreSQL hba config path
       ansible.builtin.command: psql -t -c "SHOW hba_file"
-      become: true
       become_user: postgres
       register: pg_hba_path
       changed_when: false
@@ -86,7 +79,6 @@
         method: scram-sha-256
         users: "{{ db_user }}"
         create: true
-      become: true
       become_user: postgres
       notify: Restart postgresql
 

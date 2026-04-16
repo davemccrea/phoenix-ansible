@@ -7,19 +7,19 @@
 
   tasks:
     - name: Check for 'sudo' group
-      group:
+      ansible.builtin.group:
         name: sudo
         state: present
 
     - name: Allow sudo group to have passwordless sudo
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/sudoers
         state: present
         regexp: "^%sudo"
         line: "%sudo ALL=(ALL) NOPASSWD: ALL"
 
     - name: Create a user
-      user:
+      ansible.builtin.user:
         name: "{{ user }}"
         groups: sudo
         append: yes
@@ -27,13 +27,13 @@
         shell: /bin/bash
 
     - name: Set authorized key
-      authorized_key:
+      ansible.posix.authorized_key:
         user: "{{ user }}"
         state: present
         key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
     - name: Disallow root SSH access
-      lineinfile:
+      ansible.builtin.lineinfile:
         dest: /etc/ssh/sshd_config
         regexp: "^PermitRootLogin"
         line: "PermitRootLogin no"
@@ -42,4 +42,4 @@
     - name: Reboot the machine
       remote_user: "{{ user }}"
       become: true
-      reboot:
+      ansible.builtin.reboot:

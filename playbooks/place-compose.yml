@@ -8,14 +8,14 @@
 
   tasks:
     - name: Create app directory
-      file:
+      ansible.builtin.file:
         path: "{{ compose_dir }}"
         state: directory
         owner: "{{ user }}"
         mode: "0755"
 
     - name: Place docker-compose.yml
-      template:
+      ansible.builtin.template:
         src: ../templates/docker-compose.yml.j2
         dest: "{{ compose_dir }}/docker-compose.yml"
         owner: "{{ user }}"

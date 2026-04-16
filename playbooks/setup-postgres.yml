@@ -5,7 +5,7 @@
 
   tasks:
     - name: Install packages
-      apt:
+      ansible.builtin.apt:
         name:
           - postgresql
           - postgresql-contrib
@@ -15,7 +15,7 @@
         update_cache: yes
 
     - name: Start and enable postgresql
-      service:
+      ansible.builtin.service:
         name: postgresql
         state: started
         enabled: true
@@ -72,7 +72,7 @@
       become_user: postgres
 
     - name: Get PostgreSQL hba config path
-      command: psql -t -c "SHOW hba_file"
+      ansible.builtin.command: psql -t -c "SHOW hba_file"
       become: true
       become_user: postgres
       register: pg_hba_path
@@ -92,6 +92,6 @@
 
   handlers:
     - name: Restart postgresql
-      systemd:
+      ansible.builtin.systemd:
         name: postgresql
         state: restarted

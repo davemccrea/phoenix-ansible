@@ -4,23 +4,23 @@
   remote_user: "{{ user }}"
   handlers:
     - name: Reload ufw
-      service:
+      ansible.builtin.service:
         name: ufw
         state: reloaded
 
     - name: Reload SSH
-      service:
+      ansible.builtin.service:
         name: ssh
         state: reloaded
 
   tasks:
     - name: Update package cache
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 3600
 
     - name: Disable PasswordAuthentication
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^#?\s*PasswordAuthentication\s'
         line: "PasswordAuthentication no"
@@ -29,7 +29,7 @@
       notify: Reload SSH
 
     - name: Disable root login
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^#?\s*PermitRootLogin\s'
         line: "PermitRootLogin no"
@@ -37,28 +37,28 @@
       notify: Reload SSH
 
     - name: Install Fail2Ban
-      apt:
+      ansible.builtin.apt:
         name: fail2ban
         state: present
 
     - name: Start and enable Fail2Ban
-      service:
+      ansible.builtin.service:
         name: fail2ban
         state: started
         enabled: true
 
     - name: Install ufw
-      apt:
+      ansible.builtin.apt:
         name: ufw
         state: present
 
     - name: Allow SSH
-      ufw:
+      community.general.ufw:
         rule: allow
         name: OpenSSH
 
     - name: Enable ufw
-      ufw:
+      community.general.ufw:
         state: enabled
         policy: deny
         direction: incoming

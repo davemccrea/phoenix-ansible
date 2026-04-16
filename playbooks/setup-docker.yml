@@ -5,7 +5,7 @@
 
   tasks:
     - name: Install prerequisites
-      apt:
+      ansible.builtin.apt:
         name:
           - ca-certificates
           - curl
@@ -13,19 +13,19 @@
         update_cache: yes
 
     - name: Create Docker apt keyring directory
-      file:
+      ansible.builtin.file:
         path: /etc/apt/keyrings
         state: directory
         mode: "0755"
 
     - name: Add Docker GPG key
-      get_url:
+      ansible.builtin.get_url:
         url: https://download.docker.com/linux/ubuntu/gpg
         dest: /etc/apt/keyrings/docker.asc
         mode: "0644"
 
     - name: Add Docker apt repository
-      apt_repository:
+      ansible.builtin.apt_repository:
         repo: >-
           deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc]
           https://download.docker.com/linux/ubuntu
@@ -34,7 +34,7 @@
         filename: docker
 
     - name: Install Docker packages
-      apt:
+      ansible.builtin.apt:
         name:
           - docker-ce
           - docker-ce-cli
@@ -45,13 +45,13 @@
         update_cache: yes
 
     - name: Start and enable Docker
-      service:
+      ansible.builtin.service:
         name: docker
         state: started
         enabled: true
 
     - name: Add user to docker group
-      user:
+      ansible.builtin.user:
         name: "{{ user }}"
         groups: docker
         append: yes

@@ -78,12 +78,16 @@ Your vault should contain the following secrets:
 vault_db_user: secret
 vault_db_password: secret
 vault_secret_key_base: secret
+vault_token_signing_secret: secret
 vault_release_cookie: secret
+vault_stripe_api_key: secret
+vault_stripe_webhook_secret: secret
+vault_here_api_key: secret
 vault_tailscale_authkey: secret
 vault_cloudflare_tunnel_token: secret
 ```
 
-The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `http://app:<app_port>` — use the container name `app`, not `localhost`, since the containers run on a shared Docker bridge network.
+The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `http://localhost:<app_port>`.
 
 ## Playbooks
 

@@ -33,6 +33,7 @@ stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
 
 # Third-party services
 here_api_key: "{{ vault_here_api_key }}"
+imgproxy_prefix: https://images.mccrea.link
 imgproxy_key: "{{ vault_imgproxy_key }}"
 imgproxy_salt: "{{ vault_imgproxy_salt }}"
 cloudflare_tunnel_token: "{{ vault_cloudflare_tunnel_token }}"

@@ -14,6 +14,13 @@
         owner: "{{ user }}"
         mode: "0755"
 
+    - name: Create images directory
+      ansible.builtin.file:
+        path: "{{ compose_dir }}/images"
+        state: directory
+        owner: "{{ user }}"
+        mode: "0755"
+
     - name: Place docker-compose.yml
       ansible.builtin.template:
         src: ../templates/docker-compose.yml.j2

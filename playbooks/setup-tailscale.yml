@@ -42,7 +42,7 @@
 
     - name: Bring Tailscale up
       ansible.builtin.command:
-        cmd: tailscale up --authkey={{ vault_tailscale_authkey }} --hostname={{ tailscale_hostname }} --accept-dns=false
+        cmd: tailscale up --authkey={{ tailscale_authkey }} --hostname={{ tailscale_hostname }} --accept-dns=false
       register: tailscale_up
       changed_when: tailscale_up.rc == 0 and tailscale_up.stderr != ''
       no_log: true

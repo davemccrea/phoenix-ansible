@@ -1,4 +1,4 @@
-# Simple Phoenix deployment with Ansible
+# Phoenix Server Setup with Ansible
 
 > [!NOTE]
 > Intended for use on Ubuntu.
@@ -10,7 +10,7 @@ By "simple" I mean the following:
 - Postgres on the same server, managed by Ansible
 - App deployment handled by GitHub Actions (not Ansible)
 
-The app and `cloudflared` run as Docker containers. Postgres runs directly on the host. Ansible handles server setup only — app deployments are done via GitHub Actions, which builds a Docker image, pushes it to ghcr.io, and pulls it onto the server.
+The app and `cloudflared` run as Docker containers. Postgres runs directly on the host. Ansible handles server setup only. App deployments are handled seperately via GitHub Actions, which builds a Docker image, pushes it to ghcr.io, and pulls it onto the server.
 
 ## Getting started
 
@@ -46,45 +46,27 @@ user: david
 app_port: 4000
 project_name: my_app       # Should match your Phoenix project name
 project_url: myapp.example.com
-github_username: myusername
 # etc...
 ```
 
 ### Create a vault
 
-Ansible Vault is used to encrypt sensitive data. To create a new vault:
+Ansible Vault is used to encrypt sensitive values. `group_vars/hosts/vars` lists all required `vault_*` variables which should be added to the vault:
 
 ```bash
 ansible-vault create group_vars/hosts/vault
 ```
 
-To avoid entering the vault password for each task, store it in a file:
-
-```bash
-echo 'my_vault_password' > .vault_pass
-```
-
-This file is not tracked by version control.
-
-The vault can be edited by running:
+To edit the vault later:
 
 ```bash
 ansible-vault edit group_vars/hosts/vault
 ```
 
-Your vault should contain the following secrets:
+To avoid entering the vault password on each run, store it in `.vault_pass` (already gitignored):
 
-```yaml
-vault_db_user: secret
-vault_db_password: secret
-vault_secret_key_base: secret
-vault_token_signing_secret: secret
-vault_release_cookie: secret
-vault_stripe_api_key: secret
-vault_stripe_webhook_secret: secret
-vault_here_api_key: secret
-vault_tailscale_authkey: secret
-vault_cloudflare_tunnel_token: secret
+```bash
+echo 'my_vault_password' > .vault_pass
 ```
 
 The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard when you create a tunnel. Point the tunnel's public hostname at `http://localhost:<app_port>`.
@@ -116,7 +98,7 @@ This playbook:
 - Places the `docker-compose.yml` at `/opt/<project_name>/docker-compose.yml`
 
 > [!NOTE]
-> UFW only opens port 22 (SSH) and the Tailscale interface. Ports 80/443 are not needed — all traffic arrives via the Cloudflare Tunnel.
+> UFW only opens port 22 (SSH) and the Tailscale interface. Ports 80/443 are not needed - all traffic arrives via the Cloudflare Tunnel.
 
 ### App deployment
 

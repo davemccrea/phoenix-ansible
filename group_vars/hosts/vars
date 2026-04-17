@@ -10,6 +10,8 @@ app_port: 4000
 secret_key_base: "{{ vault_secret_key_base }}"
 token_signing_secret: "{{ vault_token_signing_secret }}"
 release_cookie: "{{ vault_release_cookie }}"
+maintenance_mode: false
+maintenance_bypass_secret: "{{ vault_maintenance_bypass_secret }}"
 
 # Database
 db_name: "{{ project_name }}_prod"
@@ -31,9 +33,13 @@ tailscale_authkey: "{{ vault_tailscale_authkey }}"
 stripe_api_key: "{{ vault_stripe_api_key }}"
 stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
 
-# Third-party services
+# Here
 here_api_key: "{{ vault_here_api_key }}"
+
+# imgproxy
 imgproxy_prefix: https://images.mccrea.link
 imgproxy_key: "{{ vault_imgproxy_key }}"
 imgproxy_salt: "{{ vault_imgproxy_salt }}"
+
+# Cloudflare
 cloudflare_tunnel_token: "{{ vault_cloudflare_tunnel_token }}"

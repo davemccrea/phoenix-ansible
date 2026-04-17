@@ -21,6 +21,13 @@
         owner: "{{ user }}"
         mode: "0755"
 
+    - name: Fix images permissions every 5 minutes
+      ansible.builtin.cron:
+        name: "Fix imgproxy image permissions"
+        minute: "*/5"
+        job: "find {{ compose_dir }}/images -type f -exec chmod 644 {} \\; 2>/dev/null"
+        user: root
+
     - name: Place docker-compose.yml
       ansible.builtin.template:
         src: ../templates/docker-compose.yml.j2

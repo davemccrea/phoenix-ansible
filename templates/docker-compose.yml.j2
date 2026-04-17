@@ -3,22 +3,36 @@ services:
     image: ghcr.io/{{ github_username }}/{{ project_name }}:{{ app_version | default('latest') }}
     container_name: "{{ project_name }}"
     restart: unless-stopped
+    network_mode: host
     environment:
       PHX_SERVER: "true"
       PHX_HOST: "{{ project_url }}"
       PORT: "{{ app_port }}"
-      SECRET_KEY_BASE: "{{ vault_secret_key_base }}"
-      TOKEN_SIGNING_SECRET: "{{ vault_token_signing_secret }}"
+      SECRET_KEY_BASE: "{{ secret_key_base }}"
+      TOKEN_SIGNING_SECRET: "{{ token_signing_secret }}"
       DATABASE_URL: "{{ database_url }}"
-      RELEASE_COOKIE: "{{ vault_release_cookie }}"
-      STRIPE_API_KEY: "{{ vault_stripe_api_key }}"
-      STRIPE_WEBHOOK_SECRET: "{{ vault_stripe_webhook_secret }}"
-      HERE_API_KEY: "{{ vault_here_api_key }}"
+      RELEASE_COOKIE: "{{ release_cookie }}"
+      STRIPE_API_KEY: "{{ stripe_api_key }}"
+      STRIPE_WEBHOOK_SECRET: "{{ stripe_webhook_secret }}"
+      HERE_API_KEY: "{{ here_api_key }}"
+      IMGPROXY_KEY: "{{ imgproxy_key }}"
+      IMGPROXY_SALT: "{{ imgproxy_salt }}"
+
+  imgproxy:
+    image: darthsim/imgproxy:v3
+    restart: unless-stopped
     network_mode: host
+    environment:
+      IMGPROXY_KEY: "{{ imgproxy_key }}"
+      IMGPROXY_SALT: "{{ imgproxy_salt }}"
+      IMGPROXY_LOCAL_FILESYSTEM_ROOT: /images
+    volumes:
+      - /opt/{{ project_name }}/images:/images
 
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
+    network_mode: host
     command: tunnel --no-autoupdate run
     environment:
-      TUNNEL_TOKEN: "{{ vault_cloudflare_tunnel_token }}"
+      TUNNEL_TOKEN: "{{ cloudflare_tunnel_token }}"

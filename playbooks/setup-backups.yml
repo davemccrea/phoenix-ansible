@@ -1,0 +1,24 @@
+- name: Setup database backups
+  hosts: all
+  become: true
+  remote_user: "{{ user }}"
+
+  vars:
+    backup_dir: /opt/{{ project_name }}/backups
+
+  tasks:
+    - name: Create backup directory
+      ansible.builtin.file:
+        path: "{{ backup_dir }}"
+        state: directory
+        owner: postgres
+        mode: "0750"
+
+    - name: Schedule daily pg_dump
+      ansible.builtin.cron:
+        name: "Backup {{ db_name }}"
+        hour: "2"
+        minute: "0"
+        user: postgres
+        job: >-
+          pg_dump -Fc {{ db_name }} > {{ backup_dir }}/{{ db_name }}_$(date +\%Y\%m\%dT\%H\%M\%S).dump

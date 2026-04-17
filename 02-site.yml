@@ -4,3 +4,4 @@
 - import_playbook: playbooks/setup-postgres.yml
 - import_playbook: playbooks/setup-docker.yml
 - import_playbook: playbooks/place-compose.yml
+- import_playbook: playbooks/setup-backups.yml

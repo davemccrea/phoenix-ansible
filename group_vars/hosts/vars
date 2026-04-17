@@ -1,19 +1,38 @@
-# Change me!
-user: david
-app_port: 4000
-project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
-project_url: edenflowers.mccrea.link
-github_username: davemccrea
-tailscale_hostname: edenflowers-server
-tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
-db_name: "{{ project_name }}_prod"
-
 ansible_python_interpreter: /usr/bin/python3
 
-github_actions_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHR1/KrPvby/MpfjDv9sM6X9zRMyrAVXNqVpcYzGJDm github-actions"
+# Project
+project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
+project_url: edenflowers.mccrea.link
+user: david
 
-# Leave me alone!
-github_token: "{{ vault_github_token }}"
+# App
+app_port: 4000
+secret_key_base: "{{ vault_secret_key_base }}"
+token_signing_secret: "{{ vault_token_signing_secret }}"
+release_cookie: "{{ vault_release_cookie }}"
+
+# Database
+db_name: "{{ project_name }}_prod"
 db_user: "{{ vault_db_user }}"
 db_password: "{{ vault_db_password }}"
 database_url: "ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"
+
+# GitHub
+github_username: davemccrea
+github_token: "{{ vault_github_token }}"
+github_actions_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHR1/KrPvby/MpfjDv9sM6X9zRMyrAVXNqVpcYzGJDm github-actions"
+
+# Tailscale
+tailscale_hostname: edenflowers-server
+tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
+tailscale_authkey: "{{ vault_tailscale_authkey }}"
+
+# Stripe
+stripe_api_key: "{{ vault_stripe_api_key }}"
+stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
+
+# Third-party services
+here_api_key: "{{ vault_here_api_key }}"
+imgproxy_key: "{{ vault_imgproxy_key }}"
+imgproxy_salt: "{{ vault_imgproxy_salt }}"
+cloudflare_tunnel_token: "{{ vault_cloudflare_tunnel_token }}"

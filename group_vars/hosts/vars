@@ -2,7 +2,7 @@ ansible_python_interpreter: /usr/bin/python3
 
 # Project
 project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
-project_url: edenflowers.mccrea.link
+project_url: edenflowers.fi
 user: david
 
 # App
@@ -10,7 +10,7 @@ app_port: 4000
 secret_key_base: "{{ vault_secret_key_base }}"
 token_signing_secret: "{{ vault_token_signing_secret }}"
 release_cookie: "{{ vault_release_cookie }}"
-maintenance_mode: false
+maintenance_mode: true
 maintenance_bypass_secret: "{{ vault_maintenance_bypass_secret }}"
 
 # Database
@@ -37,7 +37,7 @@ stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
 here_api_key: "{{ vault_here_api_key }}"
 
 # imgproxy
-imgproxy_prefix: https://images.mccrea.link
+imgproxy_prefix: https://images.edenflowers.fi
 imgproxy_key: "{{ vault_imgproxy_key }}"
 imgproxy_salt: "{{ vault_imgproxy_salt }}"
 

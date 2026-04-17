@@ -11,7 +11,7 @@ services:
       SECRET_KEY_BASE: "{{ secret_key_base }}"
       TOKEN_SIGNING_SECRET: "{{ token_signing_secret }}"
       RELEASE_COOKIE: "{{ release_cookie }}"
-      MAINTENANCE_MODE: "{{ maintenance_mode }}"
+      MAINTENANCE_MODE: "{{ maintenance_mode | string | lower }}"
       MAINTENANCE_BYPASS_SECRET: "{{ maintenance_bypass_secret }}"
       DATABASE_URL: "{{ database_url }}"
       STRIPE_API_KEY: "{{ stripe_api_key }}"

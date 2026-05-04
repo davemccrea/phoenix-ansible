@@ -1,7 +1,7 @@
 # Phoenix Server Setup with Ansible
 
 > [!NOTE]
-> Intended for use on Ubuntu.
+> Intended for use on Ubuntu or Debian.
 
 By "simple" I mean the following:
 

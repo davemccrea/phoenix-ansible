@@ -30,7 +30,8 @@ tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
 tailscale_authkey: "{{ vault_tailscale_authkey }}"
 
 # Stripe
-stripe_api_key: "{{ vault_stripe_api_key }}"
+stripe_secret_key: "{{ vault_stripe_secret_key }}"
+stripe_publishable_key: "{{ vault_stripe_publishable_key }}"
 stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
 
 # Here

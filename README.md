@@ -125,6 +125,12 @@ github_actions_public_key: "ssh-ed25519 AAAA... github-actions"
 
 It will be added to `authorized_keys` when you run `01-bootstrap.yml`. Add the private key (`cat ~/.ssh/github_actions`) as a GitHub Actions secret (e.g. `SSH_PRIVATE_KEY`) in your app repo.
 
+## Tail app logs
+
+```bash
+ssh <user>@<tailscale_hostname>.<tailscale_tailnet_name> docker logs -f <project_name>
+```
+
 ## Connect with Livebook
 
 Start Livebook on your local machine.

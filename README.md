@@ -51,7 +51,20 @@ project_url: myapp.example.com
 
 ### Create a vault
 
-Ansible Vault is used to encrypt sensitive values. `group_vars/hosts/vars` lists all required `vault_*` variables which should be added to the vault:
+Ansible Vault is used to encrypt sensitive values. See `group_vars/hosts/vault.example` for the full list of required `vault_*` variables with placeholder values and generation hints.
+
+> [!IMPORTANT]
+> The variables in `vars` and `vault.example` reflect **my specific deployment** (Stripe, Google OAuth, HERE Maps, imgproxy, Cloudflare Tunnel, etc.). They are not a generic template. Treat them as a reference — add, remove, or rename keys to match the services your own app actually uses, and update `templates/` and the playbooks accordingly.
+
+The quickest path:
+
+```bash
+cp group_vars/hosts/vault.example group_vars/hosts/vault
+# edit values, then:
+ansible-vault encrypt group_vars/hosts/vault
+```
+
+Or create an empty encrypted file and paste the keys in:
 
 ```bash
 ansible-vault create group_vars/hosts/vault

@@ -1,0 +1,8 @@
+profile: production
+
+exclude_paths:
+  - .git/
+  - .vault_pass
+
+warn_list:
+  - experimental

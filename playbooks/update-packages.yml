@@ -1,13 +1,12 @@
 - name: Update packages
   hosts: all
   become: true
-  remote_user: "{{ user }}"
 
   tasks:
     - name: Update all packages
       ansible.builtin.apt:
         upgrade: dist
-        update_cache: yes
+        update_cache: true
 
     - name: Check if reboot is required
       ansible.builtin.stat:

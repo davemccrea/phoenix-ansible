@@ -1,7 +1,6 @@
 - name: Harden server
   hosts: all
   become: true
-  remote_user: "{{ user }}"
   handlers:
     - name: Reload ufw
       ansible.builtin.service:
@@ -16,7 +15,7 @@
   tasks:
     - name: Update package cache
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         cache_valid_time: 3600
 
     - name: Disable PasswordAuthentication

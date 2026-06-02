@@ -1,7 +1,6 @@
 - name: Install Docker
   hosts: all
   become: true
-  remote_user: "{{ user }}"
 
   tasks:
     - name: Install prerequisites
@@ -10,7 +9,7 @@
           - ca-certificates
           - curl
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Create Docker apt keyring directory
       ansible.builtin.file:
@@ -42,7 +41,7 @@
           - docker-buildx-plugin
           - docker-compose-plugin
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Start and enable Docker
       ansible.builtin.service:
@@ -54,7 +53,7 @@
       ansible.builtin.user:
         name: "{{ user }}"
         groups: docker
-        append: yes
+        append: true
 
     - name: Log in to GitHub Container Registry
       community.docker.docker_login:

@@ -1,7 +1,6 @@
 - name: Setup database backups
   hosts: all
   become: true
-  remote_user: "{{ user }}"
 
   vars:
     backup_dir: /opt/{{ project_name }}/backups

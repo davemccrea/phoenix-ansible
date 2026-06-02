@@ -43,3 +43,6 @@ vault_imgproxy_salt: "hex-encoded salt"
 
 # Cloudflare Tunnel (token from Cloudflare Zero Trust dashboard)
 vault_cloudflare_tunnel_token: "eyJ..."
+
+# Papra (generate with: openssl rand -base64 32)
+vault_papra_auth_secret: "your_papra_auth_secret"

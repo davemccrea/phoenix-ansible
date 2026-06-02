@@ -35,6 +35,18 @@ services:
     volumes:
       - /opt/{{ project_name }}/images:/images
 
+  papra:
+    image: ghcr.io/papra-hq/papra:latest
+    container_name: papra
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      AUTH_SECRET: "{{ papra_auth_secret }}"
+      APP_BASE_URL: "{{ papra_base_url }}"
+    volumes:
+      - ./papra:/app/app-data
+    user: 1000:1000
+
   cloudflared:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped

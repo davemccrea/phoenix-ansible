@@ -13,3 +13,9 @@
   ansible.builtin.systemd:
     name: postgresql
     state: restarted
+
+- name: Recreate container
+  community.docker.docker_compose_v2:
+    project_src: "/opt/{{ project_name }}"
+    state: present
+    recreate: always

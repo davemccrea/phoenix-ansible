@@ -26,3 +26,4 @@
     dest: "/opt/{{ project_name }}/docker-compose.yml"
     owner: "{{ user }}"
     mode: "0644"
+  notify: Recreate container

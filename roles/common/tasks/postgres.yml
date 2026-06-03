@@ -8,6 +8,7 @@
       - acl
     state: present
     update_cache: true
+    cache_valid_time: 3600
 
 - name: Start and enable postgresql
   ansible.builtin.service:
@@ -41,7 +42,6 @@
     privs: ALL
     type: database
     role: "{{ db_user }}"
-    grant_option: false
   become_user: postgres
 
 - name: Enable citext extension
@@ -57,7 +57,6 @@
     type: schema
     obj: public
     role: "{{ db_user }}"
-    grant_option: false
   become_user: postgres
 
 - name: Get PostgreSQL hba config path
@@ -73,6 +72,7 @@
     databases: all
     method: scram-sha-256
     users: "{{ db_user }}"
+    address: 127.0.0.1/32
     create: true
   become_user: postgres
   notify: Restart postgresql

@@ -151,3 +151,11 @@ ssh <user>@<tailscale_hostname>.<tailscale_tailnet_name> docker logs -f <project
 Start Livebook on your local machine.
 
 Use "Attached Node" to connect to the Elixir node running on the server. The node name is the Tailscale hostname plus the tailnet name, e.g. `my_app@my-server.tail1234.ts.net`.
+
+## IEx remote shell
+
+SSH into the server, then:
+
+```bash
+docker exec -it <project_name> /app/bin/<app_name> remote
+```

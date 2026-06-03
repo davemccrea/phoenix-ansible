@@ -11,6 +11,8 @@ services:
       SECRET_KEY_BASE: "{{ secret_key_base }}"
       TOKEN_SIGNING_SECRET: "{{ token_signing_secret }}"
       RELEASE_COOKIE: "{{ release_cookie }}"
+      RELEASE_DISTRIBUTION: name
+      RELEASE_NODE: "{{ project_name }}@127.0.0.1"
       MAINTENANCE_MODE: "{{ maintenance_mode | string | lower }}"
       MAINTENANCE_BYPASS_SECRET: "{{ maintenance_bypass_secret }}"
       DATABASE_URL: "{{ database_url }}"

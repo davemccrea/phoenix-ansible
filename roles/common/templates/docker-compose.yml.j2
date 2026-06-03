@@ -45,6 +45,7 @@ services:
     environment:
       AUTH_SECRET: "{{ papra_auth_secret }}"
       APP_BASE_URL: "{{ papra_base_url }}"
+      AUTH_IS_REGISTRATION_ENABLED: false
     volumes:
       - ./papra:/app/app-data
     user: 1000:1000

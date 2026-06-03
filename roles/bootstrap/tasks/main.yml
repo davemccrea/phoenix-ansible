@@ -1,0 +1,42 @@
+---
+- name: Check for 'sudo' group
+  ansible.builtin.group:
+    name: sudo
+    state: present
+
+- name: Allow sudo group to have passwordless sudo
+  ansible.builtin.lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+
+- name: Create a user
+  ansible.builtin.user:
+    name: "{{ user }}"
+    groups: sudo
+    append: true
+    state: present
+    shell: /bin/bash
+
+- name: Set authorized key
+  ansible.posix.authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Set GitHub Actions authorized key
+  ansible.posix.authorized_key:
+    user: "{{ user }}"
+    state: present
+    key: "{{ github_actions_public_key }}"
+
+- name: Disallow root SSH access
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+
+- name: Reboot the machine
+  ansible.builtin.reboot:

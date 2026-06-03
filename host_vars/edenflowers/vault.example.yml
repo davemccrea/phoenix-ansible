@@ -1,13 +1,13 @@
-# Example vault file. Copy to `vault` and encrypt with:
+# Example vault file. Copy to `vault.yml` and encrypt with:
 #
-#   cp group_vars/hosts/vault.example group_vars/hosts/vault
+#   cp host_vars/edenflowers/vault.example.yml host_vars/edenflowers/vault.yml
 #   # edit values, then:
-#   ansible-vault encrypt group_vars/hosts/vault
+#   ansible-vault encrypt host_vars/edenflowers/vault.yml
 #
-# Or create from scratch with `ansible-vault create group_vars/hosts/vault`
+# Or create from scratch with `ansible-vault create host_vars/edenflowers/vault.yml`
 # and paste the keys below.
 #
-# Every variable here is referenced from `group_vars/hosts/vars`.
+# Every variable here is referenced from `host_vars/edenflowers/vars.yml`.
 
 # App
 vault_secret_key_base: "generate with: mix phx.gen.secret"

@@ -1,0 +1,15 @@
+---
+- name: Reload SSH
+  ansible.builtin.service:
+    name: ssh
+    state: reloaded
+
+- name: Reload ufw
+  ansible.builtin.service:
+    name: ufw
+    state: reloaded
+
+- name: Restart postgresql
+  ansible.builtin.systemd:
+    name: postgresql
+    state: restarted

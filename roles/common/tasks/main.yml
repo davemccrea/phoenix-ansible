@@ -1,0 +1,8 @@
+---
+- import_tasks: update-packages.yml
+- import_tasks: harden.yml
+- import_tasks: tailscale.yml
+- import_tasks: postgres.yml
+- import_tasks: docker.yml
+- import_tasks: app.yml
+- import_tasks: backups.yml

@@ -25,6 +25,9 @@ services:
       IMGPROXY_PREFIX: "{{ imgproxy_prefix }}"
       IMGPROXY_KEY: "{{ imgproxy_key }}"
       IMGPROXY_SALT: "{{ imgproxy_salt }}"
+      PAPRA_BASE_URL: "{{ papra_base_url }}"
+      PAPRA_API_KEY: "{{ papra_api_key }}"
+      PAPRA_WEBHOOK_SECRET: "{{ papra_webhook_secret }}"
 
   imgproxy:
     image: darthsim/imgproxy:v3
@@ -43,13 +46,9 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      AUTH_SECRET: "{{ papra_auth_secret }}"
       APP_BASE_URL: "{{ papra_base_url }}"
+      AUTH_SECRET: "{{ papra_auth_secret }}"
       AUTH_IS_REGISTRATION_ENABLED: false
-      INTAKE_EMAILS_IS_ENABLED: true
-      INTAKE_EMAILS_DRIVER: "catch-all"
-      INTAKE_EMAILS_CATCH_ALL_DOMAIN: "ingest.{{ project_url }}"
-      INTAKE_EMAILS_WEBHOOK_SECRET: "{{ papra_intake_webhook_secret }}"
     volumes:
       - ./papra:/app/app-data
     user: 1000:1000

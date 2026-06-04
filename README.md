@@ -6,11 +6,11 @@
 By "simple" I mean the following:
 
 - A single server
-- Docker Compose for the app and Cloudflare Tunnel
+- Docker Compose for the app, imgproxy, Papra, and Cloudflare Tunnel
 - Postgres on the same server, managed by Ansible
 - App deployment handled by GitHub Actions (not Ansible)
 
-The app and `cloudflared` run as Docker containers. Postgres runs directly on the host. Ansible handles server setup only. App deployments are handled separately via GitHub Actions, which builds a Docker image, pushes it to ghcr.io, and pulls it onto the server.
+The app, `imgproxy`, `papra`, and `cloudflared` run as Docker containers. Postgres runs directly on the host. Ansible handles server setup only. App deployments are handled separately via GitHub Actions, which builds a Docker image, pushes it to ghcr.io, and pulls it onto the server.
 
 ## Getting started
 

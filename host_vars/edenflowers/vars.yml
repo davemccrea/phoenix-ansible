@@ -54,5 +54,6 @@ papra_base_url: "https://papra.edenflowers.fi"
 papra_auth_secret: "{{ vault_papra_auth_secret }}"
 papra_api_key: "{{ vault_papra_api_key }}"
 papra_webhook_secret: "{{ vault_papra_webhook_secret }}"
+
 # Anthropic
 anthropic_api_key: "{{ vault_anthropic_api_key }}"

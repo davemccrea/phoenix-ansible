@@ -46,6 +46,10 @@ services:
       AUTH_SECRET: "{{ papra_auth_secret }}"
       APP_BASE_URL: "{{ papra_base_url }}"
       AUTH_IS_REGISTRATION_ENABLED: false
+      INTAKE_EMAILS_IS_ENABLED: true
+      INTAKE_EMAILS_DRIVER: "catch-all"
+      INTAKE_EMAILS_CATCH_ALL_DOMAIN: "ingest.{{ project_url }}"
+      INTAKE_EMAILS_WEBHOOK_SECRET: "{{ papra_intake_webhook_secret }}"
     volumes:
       - ./papra:/app/app-data
     user: 1000:1000

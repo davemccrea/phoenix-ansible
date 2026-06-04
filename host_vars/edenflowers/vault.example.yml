@@ -46,3 +46,4 @@ vault_cloudflare_tunnel_token: "eyJ..."
 
 # Papra (generate with: openssl rand -base64 32)
 vault_papra_auth_secret: "your_papra_auth_secret"
+vault_papra_intake_webhook_secret: "your_papra_intake_webhook_secret"

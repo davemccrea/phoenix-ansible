@@ -51,4 +51,5 @@ cloudflare_tunnel_token: "{{ vault_cloudflare_tunnel_token }}"
 
 # Papra
 papra_auth_secret: "{{ vault_papra_auth_secret }}"
+papra_intake_webhook_secret: "{{ vault_papra_intake_webhook_secret }}"
 papra_base_url: "https://papra.edenflowers.fi"

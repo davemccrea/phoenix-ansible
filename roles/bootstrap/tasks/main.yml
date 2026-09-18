@@ -31,12 +31,17 @@
     state: present
     key: "{{ github_actions_public_key }}"
 
+# sshd uses the first value it reads, and sshd_config.d/ is read before sshd_config,
+# so this has to be a drop-in that sorts before cloud-init's files.
 - name: Disallow root SSH access
-  ansible.builtin.lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: "^PermitRootLogin"
-    line: "PermitRootLogin no"
-    state: present
+  ansible.builtin.copy:
+    dest: /etc/ssh/sshd_config.d/00-disable-root-login.conf
+    content: "PermitRootLogin no\n"
+    mode: "0644"
+    validate: sshd -t -f %s
 
-- name: Reboot the machine
-  ansible.builtin.reboot:
+# Restart, not reboot: the open connection survives, but a reboot would have to reconnect as root.
+- name: Restart ssh
+  ansible.builtin.service:
+    name: ssh
+    state: restarted

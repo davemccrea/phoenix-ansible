@@ -33,13 +33,18 @@ ansible-galaxy collection install -r requirements.yml --upgrade
 Specify the target host by updating `inventory.ini`:
 
 ```ini
-[web]
+[production]
 edenflowers ansible_host=1.2.3.4
+
+[staging]
+edenflowers-staging ansible_host=5.6.7.8
 ```
 
-### Update vars file
+Target one environment with `-l`, e.g. `ansible-playbook site.yml -l staging`. Without `-l`, playbooks run against every host.
 
-Modify `host_vars/<host>/vars.yml` to reflect your environment:
+### Update vars files
+
+Shared settings live in `group_vars/all/vars.yml`. Per-host overrides (`project_url`, `tailscale_hostname`, `papra_base_url`, `imgproxy_prefix`, `maintenance_mode`) live in `host_vars/<host>/vars.yml`. Secrets shared by all hosts live in `group_vars/all/vault.yml`. Each host has its own `host_vars/<host>/vault.yml` for the rest, and can override a shared secret there.
 
 ```yaml
 user: david
@@ -51,7 +56,7 @@ project_url: myapp.example.com
 
 ### Create a vault
 
-Ansible Vault is used to encrypt sensitive values. See `host_vars/<host>/vault.example.yml` for the full list of required `vault_*` variables with placeholder values and generation hints.
+Ansible Vault is used to encrypt sensitive values. See `vault.example.yml` for the full list of required `vault_*` variables with placeholder values and generation hints.
 
 > [!IMPORTANT]
 > The variables in `vars.yml` and `vault.example.yml` reflect **my specific deployment** (Stripe, Google OAuth, HERE Maps, imgproxy, Cloudflare Tunnel, etc.). They are not a generic template. Treat them as a reference: add, remove, or rename keys to match the services your own app actually uses, and update `roles/common/templates/` and `roles/common/tasks/` accordingly.
@@ -59,7 +64,7 @@ Ansible Vault is used to encrypt sensitive values. See `host_vars/<host>/vault.e
 The quickest path:
 
 ```bash
-cp host_vars/<host>/vault.example.yml host_vars/<host>/vault.yml
+cp vault.example.yml host_vars/<host>/vault.yml
 # edit values, then:
 ansible-vault encrypt host_vars/<host>/vault.yml
 ```

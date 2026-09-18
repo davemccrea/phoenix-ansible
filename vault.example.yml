@@ -1,13 +1,17 @@
 # Example vault file. Copy to `vault.yml` and encrypt with:
 #
-#   cp host_vars/edenflowers/vault.example.yml host_vars/edenflowers/vault.yml
+#   cp vault.example.yml host_vars/edenflowers/vault.yml
 #   # edit values, then:
 #   ansible-vault encrypt host_vars/edenflowers/vault.yml
 #
 # Or create from scratch with `ansible-vault create host_vars/edenflowers/vault.yml`
 # and paste the keys below.
 #
-# Every variable here is referenced from `host_vars/edenflowers/vars.yml`.
+# Every variable here is referenced from `group_vars/all/vars.yml`.
+#
+# Secrets shared by all hosts (Database, GitHub, Google, HERE, Anthropic, Tailscale, imgproxy,
+# maintenance bypass, Papra auth) live in
+# `group_vars/all/vault.yml` instead. A host vault can override any of them.
 
 # App
 vault_secret_key_base: "generate with: mix phx.gen.secret"

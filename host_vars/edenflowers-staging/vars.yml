@@ -1,0 +1,5 @@
+project_url: staging.edenflowers.fi
+maintenance_mode: false
+tailscale_hostname: edenflowers-staging
+papra_base_url: "https://papra-staging.edenflowers.fi"
+imgproxy_prefix: https://images-staging.edenflowers.fi

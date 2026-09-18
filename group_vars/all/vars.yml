@@ -1,0 +1,55 @@
+ansible_python_interpreter: /usr/bin/python3
+
+# Project
+project_name: edenflowers_store # Should match Phoenix project name / GitHub project name
+user: david
+
+# App
+app_port: 4000
+secret_key_base: "{{ vault_secret_key_base }}"
+token_signing_secret: "{{ vault_token_signing_secret }}"
+release_cookie: "{{ vault_release_cookie }}"
+maintenance_bypass_secret: "{{ vault_maintenance_bypass_secret }}"
+
+# Database
+db_name: "{{ project_name }}_prod"
+db_user: "{{ vault_db_user }}"
+db_password: "{{ vault_db_password }}"
+database_url: "ecto://{{ db_user }}:{{ db_password }}@localhost:5432/{{ db_name }}"
+
+# GitHub
+github_username: davemccrea
+github_token: "{{ vault_github_token }}"
+github_actions_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFHR1/KrPvby/MpfjDv9sM6X9zRMyrAVXNqVpcYzGJDm github-actions"
+
+# Tailscale
+tailscale_tailnet_name: tailfab2f.ts.net # https://login.tailscale.com/admin/dns
+tailscale_authkey: "{{ vault_tailscale_authkey }}"
+
+# Stripe
+stripe_secret_key: "{{ vault_stripe_secret_key }}"
+stripe_publishable_key: "{{ vault_stripe_publishable_key }}"
+stripe_webhook_secret: "{{ vault_stripe_webhook_secret }}"
+
+# Google
+google_client_id: "{{ vault_google_client_id }}"
+google_client_secret: "{{ vault_google_client_secret }}"
+
+# Here
+here_api_key: "{{ vault_here_api_key }}"
+
+# imgproxy
+imgproxy_key: "{{ vault_imgproxy_key }}"
+imgproxy_salt: "{{ vault_imgproxy_salt }}"
+
+# Cloudflare
+cloudflare_tunnel_token: "{{ vault_cloudflare_tunnel_token }}"
+
+# Papra
+papra_auth_secret: "{{ vault_papra_auth_secret }}"
+papra_api_key: "{{ vault_papra_api_key }}"
+papra_webhook_secret: "{{ vault_papra_webhook_secret }}"
+papra_organization_id: "{{ vault_papra_organization_id }}"
+
+# Anthropic
+anthropic_api_key: "{{ vault_anthropic_api_key }}"

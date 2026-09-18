@@ -133,6 +133,8 @@ App deployment is handled by GitHub Actions in the Phoenix app repo, not by Ansi
 3. SSHes into the server, updates the image tag in `docker-compose.yml`, and runs `docker compose up -d`
 4. Runs database migrations via `docker compose exec app bin/migrate`
 
+Version tags (`v*`) build `:latest` and deploy to production. Pushes to the `staging` branch build `:staging` and deploy to staging. Each host pulls the tag set by `image_tag` in its `host_vars`. The app repo needs GitHub environments named `production` and `staging`, each with its own `DEPLOY_HOST`, `DEPLOY_USER` and `DEPLOY_SSH_KEY` secrets.
+
 #### SSH key setup for GitHub Actions
 
 Generate a dedicated key pair:

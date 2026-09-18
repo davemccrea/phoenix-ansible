@@ -3,3 +3,4 @@ maintenance_mode: true
 tailscale_hostname: edenflowers-server
 papra_base_url: "https://papra.edenflowers.fi"
 imgproxy_prefix: https://images.edenflowers.fi
+image_tag: latest

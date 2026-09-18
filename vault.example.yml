@@ -1,10 +1,10 @@
 # Example vault file. Copy to `vault.yml` and encrypt with:
 #
-#   cp vault.example.yml host_vars/edenflowers/vault.yml
+#   cp vault.example.yml host_vars/production/vault.yml
 #   # edit values, then:
-#   ansible-vault encrypt host_vars/edenflowers/vault.yml
+#   ansible-vault encrypt host_vars/production/vault.yml
 #
-# Or create from scratch with `ansible-vault create host_vars/edenflowers/vault.yml`
+# Or create from scratch with `ansible-vault create host_vars/production/vault.yml`
 # and paste the keys below.
 #
 # Every variable here is referenced from `group_vars/all/vars.yml`.

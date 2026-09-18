@@ -5,7 +5,7 @@
 
 By "simple" I mean the following:
 
-- A single server
+- One server per environment (production, staging)
 - Docker Compose for the app, imgproxy, Papra, and Cloudflare Tunnel
 - Postgres on the same server, managed by Ansible
 - App deployment handled by GitHub Actions (not Ansible)
@@ -33,11 +33,8 @@ ansible-galaxy collection install -r requirements.yml --upgrade
 Specify the target host by updating `inventory.ini`:
 
 ```ini
-[production]
-edenflowers ansible_host=1.2.3.4
-
-[staging]
-edenflowers-staging ansible_host=5.6.7.8
+production ansible_host=1.2.3.4
+staging ansible_host=5.6.7.8
 ```
 
 Target one environment with `-l`, e.g. `ansible-playbook site.yml -l staging`. Without `-l`, playbooks run against every host.
@@ -47,10 +44,15 @@ Target one environment with `-l`, e.g. `ansible-playbook site.yml -l staging`. W
 Shared settings live in `group_vars/all/vars.yml`. Per-host overrides (`project_url`, `tailscale_hostname`, `papra_base_url`, `imgproxy_prefix`, `maintenance_mode`) live in `host_vars/<host>/vars.yml`. Secrets shared by all hosts live in `group_vars/all/vault.yml`. Each host has its own `host_vars/<host>/vault.yml` for the rest, and can override a shared secret there.
 
 ```yaml
+# group_vars/all/vars.yml
 user: david
 app_port: 4000
 project_name: my_app       # Should match your Phoenix project name
+# etc...
+
+# host_vars/<host>/vars.yml
 project_url: myapp.example.com
+tailscale_hostname: my-server
 # etc...
 ```
 
@@ -61,12 +63,13 @@ Ansible Vault is used to encrypt sensitive values. See `vault.example.yml` for t
 > [!IMPORTANT]
 > The variables in `vars.yml` and `vault.example.yml` reflect **my specific deployment** (Stripe, Google OAuth, HERE Maps, imgproxy, Cloudflare Tunnel, etc.). They are not a generic template. Treat them as a reference: add, remove, or rename keys to match the services your own app actually uses, and update `roles/common/templates/` and `roles/common/tasks/` accordingly.
 
-The quickest path:
+Split the keys between the shared vault (`group_vars/all/vault.yml`) and each host's vault (`host_vars/<host>/vault.yml`). The header of `vault.example.yml` lists which secrets are shared. The quickest path:
 
 ```bash
+cp vault.example.yml group_vars/all/vault.yml
 cp vault.example.yml host_vars/<host>/vault.yml
-# edit values, then:
-ansible-vault encrypt host_vars/<host>/vault.yml
+# trim each file to its keys and fill in values, then:
+ansible-vault encrypt group_vars/all/vault.yml host_vars/<host>/vault.yml
 ```
 
 Or create an empty encrypted file and paste the keys in:
@@ -75,9 +78,10 @@ Or create an empty encrypted file and paste the keys in:
 ansible-vault create host_vars/<host>/vault.yml
 ```
 
-To edit the vault later:
+To edit a vault later:
 
 ```bash
+ansible-vault edit group_vars/all/vault.yml
 ansible-vault edit host_vars/<host>/vault.yml
 ```
 
@@ -93,10 +97,10 @@ The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard
 
 ### Bootstrap (once, on a fresh server)
 
-Creates the user defined in `vars.yml`, sets up SSH keys, and disables root login. Run once as root on a freshly provisioned server:
+Creates the user defined in `group_vars/all/vars.yml`, authorizes `~/.ssh/id_rsa.pub` and the GitHub Actions key, and disables root SSH login. Run once as root on a freshly provisioned server, limited to that host:
 
 ```bash
-ansible-playbook playbooks/bootstrap.yml
+ansible-playbook playbooks/bootstrap.yml -l <host>
 ```
 
 ### Provision
@@ -137,7 +141,7 @@ Generate a dedicated key pair:
 ssh-keygen -t ed25519 -C "github-actions" -f ~/.ssh/github_actions -N ""
 ```
 
-Add the public key to `host_vars/<host>/vars.yml`:
+Add the public key to `group_vars/all/vars.yml`:
 
 ```yaml
 github_actions_public_key: "ssh-ed25519 AAAA... github-actions"

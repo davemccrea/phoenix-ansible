@@ -30,6 +30,8 @@ services:
       PAPRA_WEBHOOK_SECRET: "{{ papra_webhook_secret }}"
       PAPRA_ORGANIZATION_ID: "{{ papra_organization_id }}"
       ANTHROPIC_API_KEY: "{{ anthropic_api_key }}"
+      SMTP_USERNAME: "{{ smtp_username }}"
+      SMTP_PASSWORD: "{{ smtp_password }}"
 
   imgproxy:
     image: darthsim/imgproxy:v3

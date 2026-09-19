@@ -9,7 +9,7 @@
 #
 # Every variable here is referenced from `group_vars/all/vars.yml`.
 #
-# Secrets shared by all hosts (Database, GitHub, Google, HERE, Anthropic, Tailscale, imgproxy,
+# Secrets shared by all hosts (Database, GitHub, Google, HERE, Anthropic, SMTP, Tailscale, imgproxy,
 # maintenance bypass, Papra auth) live in
 # `group_vars/all/vault.yml` instead. A host vault can override any of them.
 
@@ -56,3 +56,7 @@ vault_papra_organization_id: "your_papra_organization_id"
 
 # Anthropic (https://console.anthropic.com/settings/keys)
 vault_anthropic_api_key: "sk-ant-..."
+
+# SMTP (Fastmail app password with SMTP access: Settings > Privacy & Security > App passwords)
+vault_smtp_username: "info@edenflowers.fi"
+vault_smtp_password: "your_fastmail_app_password"

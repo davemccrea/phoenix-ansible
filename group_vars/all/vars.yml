@@ -53,3 +53,7 @@ papra_organization_id: "{{ vault_papra_organization_id }}"
 
 # Anthropic
 anthropic_api_key: "{{ vault_anthropic_api_key }}"
+
+# SMTP (Fastmail)
+smtp_username: "{{ vault_smtp_username }}"
+smtp_password: "{{ vault_smtp_password }}"

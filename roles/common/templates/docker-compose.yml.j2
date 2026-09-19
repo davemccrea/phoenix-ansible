@@ -32,6 +32,9 @@ services:
       ANTHROPIC_API_KEY: "{{ anthropic_api_key }}"
       SMTP_USERNAME: "{{ smtp_username }}"
       SMTP_PASSWORD: "{{ smtp_password }}"
+{% if error_alert_email is defined %}
+      ERROR_ALERT_EMAIL: "{{ error_alert_email }}"
+{% endif %}
 
   imgproxy:
     image: darthsim/imgproxy:v3

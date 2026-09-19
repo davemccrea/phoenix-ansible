@@ -3,7 +3,7 @@
 > [!NOTE]
 > Intended for use on Ubuntu or Debian.
 
-By "simple" I mean the following:
+A simple setup for hosting a Phoenix app:
 
 - One server per environment (production, staging)
 - Docker Compose for the app, imgproxy, Papra, and Cloudflare Tunnel
@@ -14,18 +14,12 @@ The app, `imgproxy`, `papra`, and `cloudflared` run as Docker containers. Postgr
 
 ## Getting started
 
-Make sure Ansible is installed and that you have SSH access to the target server.
+Install [Ansible](https://docs.ansible.com/) and [just](https://just.systems), and make sure you have SSH access to the target server. Run `just` to list all commands.
 
 ### Install requirements
 
 ```bash
-ansible-galaxy install -r requirements.yml
-```
-
-To upgrade all collections to their latest versions:
-
-```bash
-ansible-galaxy collection install -r requirements.yml --upgrade
+just install            # or: just install --upgrade
 ```
 
 ### Add host
@@ -37,7 +31,7 @@ production ansible_host=1.2.3.4
 staging ansible_host=5.6.7.8
 ```
 
-Target one environment with `-l`, e.g. `ansible-playbook site.yml -l staging`. Without `-l`, playbooks run against every host.
+Every `just` recipe that touches a server takes the host name from `inventory.ini` (`production` or `staging`).
 
 ### Update vars files
 
@@ -81,8 +75,8 @@ ansible-vault create host_vars/<host>/vault.yml
 To edit a vault later:
 
 ```bash
-ansible-vault edit group_vars/all/vault.yml
-ansible-vault edit host_vars/<host>/vault.yml
+just vault              # group_vars/all/vault.yml
+just vault <host>       # host_vars/<host>/vault.yml
 ```
 
 To avoid entering the vault password on each run, store it in `.vault_pass` (already gitignored):
@@ -100,7 +94,7 @@ The Cloudflare Tunnel token is obtained from the Cloudflare Zero Trust dashboard
 Creates the user defined in `group_vars/all/vars.yml`, authorizes `~/.ssh/id_rsa.pub` and the GitHub Actions key, and disables root SSH login. Run once as root on a freshly provisioned server, limited to that host:
 
 ```bash
-ansible-playbook playbooks/bootstrap.yml -l <host>
+just bootstrap <host>
 ```
 
 ### Provision
@@ -108,10 +102,12 @@ ansible-playbook playbooks/bootstrap.yml -l <host>
 Configures the server in full:
 
 ```bash
-ansible-playbook site.yml
+just check <host>       # dry run, shows a diff of what would change
+just provision <host>   # extra args go to ansible-playbook, e.g. --tags docker
+just provision all      # every server in inventory.ini
 ```
 
-This role:
+This playbook:
 
 - Updates packages and reboots if required
 - Applies security hardening (UFW, fail2ban, SSH)
@@ -149,12 +145,22 @@ Add the public key to `group_vars/all/vars.yml`:
 github_actions_public_key: "ssh-ed25519 AAAA... github-actions"
 ```
 
-It will be added to `authorized_keys` when you run `playbooks/bootstrap.yml`. Add the private key (`cat ~/.ssh/github_actions`) as a GitHub Actions secret (e.g. `SSH_PRIVATE_KEY`) in your app repo.
+It will be added to `authorized_keys` when you run `playbooks/bootstrap.yml`. Add the private key (`cat ~/.ssh/github_actions`) as the `DEPLOY_SSH_KEY` secret in each GitHub environment of your app repo.
 
-## Tail app logs
+## Server access
 
 ```bash
-ssh <user>@<tailscale_hostname>.<tailscale_tailnet_name> docker logs -f <project_name>
+just ssh <host>         # shell on the server
+just logs <host>        # tail app logs
+just iex <host>         # IEx remote shell in the running app
+```
+
+These connect to `ansible_host` from `inventory.ini` as `remote_user` from `ansible.cfg`. `just iex` assumes the release name matches `project_name`.
+
+## Linting
+
+```bash
+just lint
 ```
 
 ## Connect with Livebook
@@ -162,11 +168,3 @@ ssh <user>@<tailscale_hostname>.<tailscale_tailnet_name> docker logs -f <project
 Start Livebook on your local machine.
 
 Use "Attached Node" to connect to the Elixir node running on the server. The node name is the Tailscale hostname plus the tailnet name, e.g. `my_app@my-server.tail1234.ts.net`.
-
-## IEx remote shell
-
-SSH into the server, then:
-
-```bash
-docker exec -it <project_name> /app/bin/<app_name> remote
-```

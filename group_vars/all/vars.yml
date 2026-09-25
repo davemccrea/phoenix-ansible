@@ -57,3 +57,5 @@ anthropic_api_key: "{{ vault_anthropic_api_key }}"
 # SMTP (Fastmail)
 smtp_username: "{{ vault_smtp_username }}"
 smtp_password: "{{ vault_smtp_password }}"
+mailer_from_name: Jennie
+mailer_from_email: info@edenflowers.fi

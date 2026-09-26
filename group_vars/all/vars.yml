@@ -38,6 +38,9 @@ google_client_secret: "{{ vault_google_client_secret }}"
 # Here
 here_api_key: "{{ vault_here_api_key }}"
 
+# Mapbox
+mapbox_token: "{{ vault_mapbox_token }}"
+
 # imgproxy
 imgproxy_key: "{{ vault_imgproxy_key }}"
 imgproxy_salt: "{{ vault_imgproxy_salt }}"

@@ -9,7 +9,7 @@
 #
 # Every variable here is referenced from `group_vars/all/vars.yml`.
 #
-# Secrets shared by all hosts (Database, GitHub, Google, HERE, Anthropic, SMTP, Tailscale, imgproxy,
+# Secrets shared by all hosts (Database, GitHub, Google, HERE, Mapbox, Anthropic, SMTP, Tailscale, imgproxy,
 # maintenance bypass, Papra auth) live in
 # `group_vars/all/vault.yml` instead. A host vault can override any of them.
 
@@ -40,6 +40,10 @@ vault_google_client_secret: "GOCSPX-..."
 
 # HERE Maps API (https://platform.here.com)
 vault_here_api_key: "your_here_api_key"
+
+# Mapbox public token for the admin order map (https://console.mapbox.com).
+# Rendered into page HTML, so restrict it to your domains in the Mapbox console.
+vault_mapbox_token: "pk...."
 
 # imgproxy (generate with: xxd -g 2 -l 64 -p /dev/random | tr -d '\n')
 vault_imgproxy_key: "hex-encoded key"

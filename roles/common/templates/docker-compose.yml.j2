@@ -14,7 +14,6 @@ services:
       RELEASE_DISTRIBUTION: name
       RELEASE_NODE: "{{ project_name }}@127.0.0.1"
       MAINTENANCE_MODE: "{{ maintenance_mode | string | lower }}"
-      MAINTENANCE_BYPASS_SECRET: "{{ maintenance_bypass_secret }}"
       DATABASE_URL: "{{ database_url }}"
       STRIPE_SECRET_KEY: "{{ stripe_secret_key }}"
       STRIPE_PUBLISHABLE_KEY: "{{ stripe_publishable_key }}"

@@ -17,7 +17,6 @@
 vault_secret_key_base: "generate with: mix phx.gen.secret"
 vault_token_signing_secret: "generate with: mix phx.gen.secret"
 vault_release_cookie: "generate with: openssl rand -base64 32"
-vault_maintenance_bypass_secret: "any random string"
 
 # Database
 vault_db_user: "your_db_user"

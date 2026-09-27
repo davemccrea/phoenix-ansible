@@ -9,7 +9,6 @@ app_port: 4000
 secret_key_base: "{{ vault_secret_key_base }}"
 token_signing_secret: "{{ vault_token_signing_secret }}"
 release_cookie: "{{ vault_release_cookie }}"
-maintenance_bypass_secret: "{{ vault_maintenance_bypass_secret }}"
 
 # Database
 db_name: "{{ project_name }}_prod"

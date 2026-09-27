@@ -13,6 +13,15 @@
     owner: "{{ user }}"
     mode: "0755"
 
+# The app container runs as Debian's nobody (65534) and writes admin photo
+# uploads here; imgproxy reads them through the images mount.
+- name: Create photo uploads directory
+  ansible.builtin.file:
+    path: "/opt/{{ project_name }}/images/uploads"
+    state: directory
+    owner: "65534"
+    mode: "0755"
+
 - name: Fix images permissions every 5 minutes
   ansible.builtin.cron:
     name: "Fix imgproxy image permissions"

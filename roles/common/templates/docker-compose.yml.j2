@@ -33,6 +33,7 @@ services:
       SMTP_PASSWORD: "{{ smtp_password }}"
       MAILER_FROM_NAME: "{{ mailer_from_name }}"
       MAILER_FROM_EMAIL: "{{ mailer_from_email }}"
+      UPLOADS_DIR: /app/uploads
 {% if error_alert_email is defined %}
       ERROR_ALERT_EMAIL: "{{ error_alert_email }}"
 {% endif %}
@@ -40,6 +41,8 @@ services:
       VAPID_PUBLIC_KEY: "{{ vapid_public_key }}"
       VAPID_PRIVATE_KEY: "{{ vapid_private_key }}"
 {% endif %}
+    volumes:
+      - /opt/{{ project_name }}/images/uploads:/app/uploads
 
   imgproxy:
     image: darthsim/imgproxy:v3

@@ -36,6 +36,10 @@ services:
 {% if error_alert_email is defined %}
       ERROR_ALERT_EMAIL: "{{ error_alert_email }}"
 {% endif %}
+{% if vapid_public_key is defined %}
+      VAPID_PUBLIC_KEY: "{{ vapid_public_key }}"
+      VAPID_PRIVATE_KEY: "{{ vapid_private_key }}"
+{% endif %}
 
   imgproxy:
     image: darthsim/imgproxy:v3

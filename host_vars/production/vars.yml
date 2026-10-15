@@ -5,3 +5,6 @@ papra_base_url: "https://papra.edenflowers.fi"
 imgproxy_prefix: https://images.edenflowers.fi
 image_tag: latest
 error_alert_email: mail@dmccrea.me
+# Web Push for admin order notifications. Staging has its own keys.
+vapid_public_key: "BN4aYz2NjwKIBK5pDPWGMPlW3QWeWTP2eBTJaFnra0IBZ0EW4A16OeSrEjdnRUescacckmA3CW5amnYsj4aJZbM"
+vapid_private_key: "{{ vault_vapid_private_key }}"

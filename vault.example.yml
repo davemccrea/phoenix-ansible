@@ -60,3 +60,10 @@ vault_anthropic_api_key: "sk-ant-..."
 # SMTP (Fastmail app password with SMTP access: Settings > Privacy & Security > App passwords)
 vault_smtp_username: "info@edenflowers.fi"
 vault_smtp_password: "your_fastmail_app_password"
+
+# Web Push VAPID private key for admin order notifications, one pair per host so
+# staging's can be regenerated without breaking production phones. The matching
+# public key goes in host_vars/<host>/vars.yml.
+# Generate a pair in the app repo with:
+#   mix run -e 'Edenflowers.WebPush.generate_keys() |> IO.inspect()'
+vault_vapid_private_key: "base64url private key"

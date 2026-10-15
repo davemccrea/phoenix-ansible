@@ -5,3 +5,7 @@ papra_base_url: "https://papra-staging.edenflowers.fi"
 imgproxy_prefix: https://images-staging.edenflowers.fi
 image_tag: staging
 db_name: "{{ project_name }}_staging"
+# Web Push for admin order notifications. Its own keys, so staging's can be
+# regenerated without breaking production phones.
+vapid_public_key: "BAmQXl-X1DVJV7hhl1fiYt_kUVOTug7SNLVYZcjDRv-bC3piIQaEQ2PgasURfWE_p9KeQ6BMWTNJ3_o6p-3EAJo"
+vapid_private_key: "{{ vault_vapid_private_key }}"

@@ -9,7 +9,7 @@
 #
 # Every variable here is referenced from `group_vars/all/vars.yml`.
 #
-# Secrets shared by all hosts (Database, GitHub, Google, HERE, Mapbox, Anthropic, SMTP, Tailscale, imgproxy,
+# Secrets shared by all hosts (Database, GitHub, HERE, Mapbox, Anthropic, SMTP, Tailscale, imgproxy,
 # maintenance bypass, Papra auth) live in
 # `group_vars/all/vault.yml` instead. A host vault can override any of them.
 
@@ -33,10 +33,6 @@ vault_tailscale_authkey: "tskey-auth-..."
 vault_stripe_secret_key: "sk_live_..."
 vault_stripe_publishable_key: "pk_live_..."
 vault_stripe_webhook_secret: "whsec_..."
-
-# Google OAuth (https://console.cloud.google.com/apis/credentials)
-vault_google_client_id: "....apps.googleusercontent.com"
-vault_google_client_secret: "GOCSPX-..."
 
 # HERE Maps API (https://platform.here.com)
 vault_here_api_key: "your_here_api_key"

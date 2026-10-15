@@ -55,7 +55,7 @@ tailscale_hostname: my-server
 Ansible Vault is used to encrypt sensitive values. See `vault.example.yml` for the full list of required `vault_*` variables with placeholder values and generation hints.
 
 > [!IMPORTANT]
-> The variables in `vars.yml` and `vault.example.yml` reflect **my specific deployment** (Stripe, Google OAuth, HERE Maps, imgproxy, Cloudflare Tunnel, etc.). They are not a generic template. Treat them as a reference: add, remove, or rename keys to match the services your own app actually uses, and update `roles/common/templates/` and `roles/common/tasks/` accordingly.
+> The variables in `vars.yml` and `vault.example.yml` reflect **my specific deployment** (Stripe, HERE Maps, imgproxy, Cloudflare Tunnel, etc.). They are not a generic template. Treat them as a reference: add, remove, or rename keys to match the services your own app actually uses, and update `roles/common/templates/` and `roles/common/tasks/` accordingly.
 
 Split the keys between the shared vault (`group_vars/all/vault.yml`) and each host's vault (`host_vars/<host>/vault.yml`). The header of `vault.example.yml` lists which secrets are shared. The quickest path:
 

@@ -56,9 +56,8 @@ vault_papra_organization_id: "your_papra_organization_id"
 # Anthropic (https://console.anthropic.com/settings/keys)
 vault_anthropic_api_key: "sk-ant-..."
 
-# SMTP (Fastmail app password with SMTP access: Settings > Privacy & Security > App passwords)
-vault_smtp_username: "info@edenflowers.fi"
-vault_smtp_password: "your_fastmail_app_password"
+# Brevo API key (SMTP & API > API keys)
+vault_brevo_api_key: "your_brevo_api_key"
 
 # Web Push VAPID private key for admin order notifications, one pair per host so
 # staging's can be regenerated without breaking production phones. The matching

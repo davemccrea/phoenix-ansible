@@ -52,8 +52,7 @@ papra_organization_id: "{{ vault_papra_organization_id }}"
 # Anthropic
 anthropic_api_key: "{{ vault_anthropic_api_key }}"
 
-# SMTP (Fastmail)
-smtp_username: "{{ vault_smtp_username }}"
-smtp_password: "{{ vault_smtp_password }}"
+# Email (Brevo)
+brevo_api_key: "{{ vault_brevo_api_key }}"
 mailer_from_name: Jennie
 mailer_from_email: info@edenflowers.fi

@@ -8,3 +8,5 @@ error_alert_email: mail@dmccrea.me
 # Web Push for admin order notifications. Staging has its own keys.
 vapid_public_key: "BN4aYz2NjwKIBK5pDPWGMPlW3QWeWTP2eBTJaFnra0IBZ0EW4A16OeSrEjdnRUescacckmA3CW5amnYsj4aJZbM"
 vapid_private_key: "{{ vault_vapid_private_key }}"
+# Only production syncs subscribers, so staging's test users stay out of the list.
+brevo_newsletter_list_id: "4"

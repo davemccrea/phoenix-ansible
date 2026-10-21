@@ -35,6 +35,9 @@ services:
 {% if error_alert_email is defined %}
       ERROR_ALERT_EMAIL: "{{ error_alert_email }}"
 {% endif %}
+{% if brevo_newsletter_list_id is defined %}
+      BREVO_NEWSLETTER_LIST_ID: "{{ brevo_newsletter_list_id }}"
+{% endif %}
 {% if vapid_public_key is defined %}
       VAPID_PUBLIC_KEY: "{{ vapid_public_key }}"
       VAPID_PRIVATE_KEY: "{{ vapid_private_key }}"
